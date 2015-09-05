@@ -119,7 +119,7 @@ function create() {
 
     socket.on('newPlayerwithPos', function(data) {
         console.log("newPlayerAdded")
-        var obj = JSON.parse(data);
+        var obj = data.data;
         var xNew = obj.x;
         var yNew = obj.y;
 
@@ -185,6 +185,8 @@ function update() {
 
     //grab new players
     socket.on('posUpdate', function(data) {
+        console.log("posUpdate!");
+        data = data.data;
         for(var playerData in data) {
 
             // update array of players

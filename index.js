@@ -45,11 +45,13 @@ io.on('connection', function (socket) {
             newFlag = true;
         }
 
-        playerPositions[d.sessionID] = d.pos;
+        playerPositions[d.sessid] = d.pos;
         if(newFlag){
-            io.emit('newPlayerwithPos', d)
+            console.log("newPlayer")
+            io.emit('newPlayerwithPos', {data: d})
         } else {
-            io.emit('posUpdate', d)
+            console.log("positionUpdate")
+            io.emit('posUpdate', {data: d})
         }
         console.log(playerPositions);
     })
