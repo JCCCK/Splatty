@@ -8,6 +8,7 @@ var express = require('express'),
     io = require('socket.io')(server);
 
 var playerCount = 0;
+var playerPositions = {};
 var id = 0;
 
 app.set('port', (process.env.PORT || 5000));
@@ -27,12 +28,31 @@ server.listen(app.get('port'), function() {
 });
 
 
+
 io.on('connection', function (socket) {
   playerCount++;
   id++;
   setTimeout(function () {
     socket.emit('connected', { playerId: id });
     io.emit('count', { playerCount: playerCount });
+    socket.emit('initialize', id);
+    socket.on('newPos', function(data){
+        console.log("fired!");
+        var d = data;
+        var newFlag = false;
+
+        if(!(d.sessionID in playerPositions)){
+            newFlag = true;
+        }
+
+        playerPositions[d.sessionID] = d.pos;
+        if(newFlag){
+            io.emit('newPlayerwithPos', d)
+        } else {
+            io.emit('posUpdate', d)
+        }
+        console.log(playerPositions);
+    })
   }, 1500);
 
   socket.on('disconnect', function () {

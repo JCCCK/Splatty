@@ -1,16 +1,11 @@
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update, render: render });
-var socket = io.connect('https://secret-temple-3770.herokuapp.com/');
+var socket = io.connect('localhost:5000');
+var Players;
 var sessionID = "";
-//DELETE FROM HERE AFTER VERIFIED
-socket.on('connect', function () {
+socket.on('connect', function (data) {
     sessionID = socket.io.engine.id
     console.log(sessionID);
 });
-var UiPlayers = document.getElementById("players");
-socket.on('count', function (data) {
-      UiPlayers.innerHTML = 'Players: ' + data['playerCount'];
-});
-//DELETE UNTIL HERE
 function preload() {
 
     game.load.tilemap('level1', '/resources/level1.json', null, Phaser.Tilemap.TILED_JSON);
@@ -80,6 +75,8 @@ function create() {
 
     player = game.add.sprite(32, 32, 'dude');
 
+
+
     game.physics.enable(player, Phaser.Physics.ARCADE);
 
     player.body.collideWorldBounds = true;
@@ -91,13 +88,28 @@ function create() {
 
     game.camera.follow(player);
 
-    var pos = JSON.stringify({
+
+    var pos = {
         sessid: sessionID,
         x: game.world.centerX,
         y: game.world.centerY,
         angle: 0
+    };
+
+    console.log(pos);
+
+    socket.on('initialize', function(data){
+        console.log(data);
+        socket.emit('newPos', {pos: pos});
+        console.log("initialized");
     });
-    socket.emit('newPos', pos);
+
+    var UiPlayers = document.getElementById("players");
+    socket.on('count', function (data) {
+          UiPlayers.innerHTML = 'Players: ' + data['playerCount'];
+    });
+
+
 
     cursors = game.input.keyboard.createCursorKeys();
     spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -106,6 +118,7 @@ function create() {
     dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
     socket.on('newPlayerwithPos', function(data) {
+        console.log("newPlayerAdded")
         var obj = JSON.parse(data);
         var xNew = obj.x;
         var yNew = obj.y;
@@ -171,7 +184,7 @@ function update() {
     }
 
     //grab new players
-    socket.on('updatePos', function(data) {
+    socket.on('posUpdate', function(data) {
         for(var playerData in data) {
 
             // update array of players
@@ -184,6 +197,8 @@ function update() {
             players[player.name] = player;
         }
     });
+
+
 
 }
 

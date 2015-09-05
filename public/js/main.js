@@ -1,13 +1,10 @@
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update, render: render });
-var socket = io.connect('https://secret-temple-3770.herokuapp.com/');
+var socket = io.connect('localhost:5000');
+var Players;
 var sessionID = "";
-socket.on('connect', function () {
+socket.on('connect', function (data) {
     sessionID = socket.io.engine.id;
     console.log(sessionID);
-});
-var UiPlayers = document.getElementById("players");
-socket.on('count', function (data) {
-    UiPlayers.innerHTML = 'Players: ' + data['playerCount'];
 });
 function preload() {
     game.load.tilemap('level1', '/resources/level1.json', null, Phaser.Tilemap.TILED_JSON);
@@ -60,19 +57,29 @@ function create() {
     player.animations.add('turn', [4], 20, true);
     player.animations.add('right', [5, 6, 7, 8], 10, true);
     game.camera.follow(player);
-    var pos = JSON.stringify({
+    var pos = {
         sessid: sessionID,
         x: game.world.centerX,
         y: game.world.centerY,
         angle: 0
+    };
+    console.log(pos);
+    socket.on('initialize', function (data) {
+        console.log(data);
+        socket.emit('newPos', { pos: pos });
+        console.log("initialized");
     });
-    socket.emit('newPos', pos);
+    var UiPlayers = document.getElementById("players");
+    socket.on('count', function (data) {
+        UiPlayers.innerHTML = 'Players: ' + data['playerCount'];
+    });
     cursors = game.input.keyboard.createCursorKeys();
     spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
     socket.on('newPlayerwithPos', function (data) {
+        console.log("newPlayerAdded");
         var obj = JSON.parse(data);
         var xNew = obj.x;
         var yNew = obj.y;
@@ -122,7 +129,7 @@ function update() {
     if (game.input.activePointer.isDown) {
         fire();
     }
-    socket.on('updatePos', function (data) {
+    socket.on('posUpdate', function (data) {
         for (var playerData in data) {
             var player = {};
             player.name = data[playerData].sessionID;
