@@ -9,8 +9,8 @@
   "dependencies": {
     "ejs": "2.3.3",
     "express": "4.13.3",
-    "phaser": "^2.4.3",
-    "socket.io": "^0.8.7"
+    "garageserver.io": "^0.6.0",
+    "phaser": "^2.4.3"
   },
   "engines": {
     "node": "0.12.7"
