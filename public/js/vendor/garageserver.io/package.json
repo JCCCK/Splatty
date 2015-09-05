@@ -1,0 +1,51 @@
+{
+  "name": "garageserver.io",
+  "description": "A simple, lightweight, HTML multiplayer game server (and client) for Node.js",
+  "author": {
+    "name": "Jeremiah Billmann",
+    "email": "jcbillmann@yahoo.com"
+  },
+  "version": "0.6.0",
+  "homepage": "https://github.com/jbillmann/GarageServer.IO",
+  "license": "MIT",
+  "keywords": [
+    "game",
+    "server",
+    "client",
+    "multiplayer",
+    "socket",
+    "html",
+    "api"
+  ],
+  "dependencies": {},
+  "main": "./lib/garageserver.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jbillmann/GarageServer.IO.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jbillmann/GarageServer.IO/issues"
+  },
+  "readme": "# GarageServer.IO\r\nA simple, lightweight, HTML multiplayer game server (and client) for Node.js\r\n\r\n![garagerserver.io](https://raw.github.com/jbillmann/GarageServer.IO/master/documentation/GarageServerIO_logo.png)\r\n\r\n## Features\r\n- Authoritative Node.js game server and JavaScript client\r\n- Client Side / Input Prediction\r\n- Client Side Smoothing\r\n- Entity Interpolation\r\n- Server State History\r\n- Server and Client Messaging\r\n- Server Reconciliation\r\n- Region Broadcasting\r\n- Works with any rendering and/or physics engine\r\n\r\n## Install\r\n\r\n### Server\r\n\r\n`$ npm install garageserver.io`\r\n\r\n### Client\r\n\r\nAfter server install, copy the client from `/node_modules/garageserver.io/client/garageserver.io.js` to a folder of your choosing within your web application for client/browser use.\r\n\r\n## Quick Start\r\n\r\n[Client & Server Quick Start](https://github.com/jbillmann/GarageServer.IO/blob/master/documentation/QuickStart.md)\r\n\r\n## GarageServer.IO API\r\n\r\n[Client API Documentation](https://github.com/jbillmann/GarageServer.IO/blob/master/documentation/ClientAPI.md)\r\n\r\n[Server API Documentation](https://github.com/jbillmann/GarageServer.IO/blob/master/documentation/ServerAPI.md)\r\n\r\n## License\r\n\r\n[MIT License](https://github.com/jbillmann/GarageServer.IO/blob/master/LICENSE.md)",
+  "readmeFilename": "README.md",
+  "_id": "garageserver.io@0.6.0",
+  "dist": {
+    "shasum": "5e4b4703d82f0bd63c2e4f40b3c776146b910cab",
+    "tarball": "http://registry.npmjs.org/garageserver.io/-/garageserver.io-0.6.0.tgz"
+  },
+  "_from": "garageserver.io@*",
+  "_npmVersion": "1.2.14",
+  "_npmUser": {
+    "name": "jbillmann",
+    "email": "jcbillmann@yahoo.com"
+  },
+  "maintainers": [
+    {
+      "name": "jbillmann",
+      "email": "jcbillmann@yahoo.com"
+    }
+  ],
+  "directories": {},
+  "_shasum": "5e4b4703d82f0bd63c2e4f40b3c776146b910cab",
+  "_resolved": "https://registry.npmjs.org/garageserver.io/-/garageserver.io-0.6.0.tgz"
+}

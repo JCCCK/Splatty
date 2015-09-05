@@ -26,5 +26,23 @@ server.listen(app.get('port'), function() {
 
 var sockets = io.listen(server);
 
-var game = new Game(sockets);
-game.start();
+var server = require('garageserver.io').createGarageServer(sockets, {/*options*/ });
+server.start();
+
+// Inside game loop ...
+var players = server.getPlayers();
+
+players.forEach(function (player) {
+    var newState = {};
+    if (!player.state.x) {
+       player.state.x = 0;
+    }
+    for (i = 0; i < player.inputs.length; i ++) {
+        if (player.inputs[i].input === 'left') {
+            newState.x = player.state.x - (50 * deltaTime);
+        } else if (inputs[i].input === 'right') {
+            newState.x = player.state.x + (50 * deltaTime);
+        }
+    }
+    server.updatePlayerState(player.id, newState);
+});
