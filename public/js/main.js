@@ -7,6 +7,7 @@ function preload() {
     game.load.image('starSmall', '/resources/star.png');
     game.load.image('starBig', '/resources/star2.png');
     game.load.image('background', '/resources/background2.png');
+    game.load.image('bullet', '/resources/purple_ball.png');
 }
 var map;
 var tileset;
@@ -17,6 +18,9 @@ var jumpTimer = 0;
 var cursors;
 var jumpButton;
 var bg;
+var bullets;
+var fireRate = 100;
+var nextFire = 0;
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.stage.backgroundColor = '#000000';
@@ -28,6 +32,12 @@ function create() {
     layer = map.createLayer('Tile Layer 1');
     layer.resizeWorld();
     game.physics.arcade.gravity.y = 500;
+    bullets = game.add.group();
+    bullets.enableBody = true;
+    bullets.physicsBodyType = Phaser.Physics.ARCADE;
+    bullets.createMultiple(50, 'bullet');
+    bullets.setAll('checkWorldBounds', true);
+    bullets.setAll('outOfBoundsKill', true);
     player = game.add.sprite(32, 32, 'dude');
     game.physics.enable(player, Phaser.Physics.ARCADE);
     player.body.collideWorldBounds = true;
@@ -71,6 +81,17 @@ function update() {
     if (jumpButton.isDown && player.body.onFloor() && game.time.now > jumpTimer) {
         player.body.velocity.y = -300;
         jumpTimer = game.time.now + 750;
+    }
+    if (game.input.activePointer.isDown) {
+        fire();
+    }
+}
+function fire() {
+    if (game.time.now > nextFire && bullets.countDead() > 0) {
+        nextFire = game.time.now + fireRate;
+        var bullet = bullets.getFirstDead();
+        bullet.reset(player.x + 10, player.y + 20);
+        game.physics.arcade.moveToPointer(bullet, 300);
     }
 }
 function render() {
