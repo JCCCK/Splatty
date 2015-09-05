@@ -141,12 +141,14 @@ function update() {
 
     if (game.input.mousePointer.x > player.world.x) {
         if (facing != 'right' && (!aKey.isDown && !cursors.left.isDown)) {
-            player.frame = 5;
+            player.animations.play('right');
+            facing = 'right';
         }
     }
     else {
         if (facing != 'left' && (!dKey.isDown && !cursors.right.isDown)) {
-            player.frame = 0;
+            player.animations.play('left');
+            facing = 'left';
         }
     }
 }
