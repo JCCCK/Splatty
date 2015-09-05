@@ -41,9 +41,9 @@ io.on('connection', function (socket) {
     socket.on('newPlayer', function(data){
         console.log("newPlayer")
         console.log(data);
-        socket.set('playerID', data, function() {
-            playerList[data] = data;
-        });
+        socket.playerID = data;
+        playerList[data] = data;
+
         io.emit('newPlayerwithPos', data)
     });
     socket.on('playerImpulse', function(data){
@@ -61,9 +61,6 @@ io.on('connection', function (socket) {
 
   socket.on('disconnect', function(){
     playerCount--;
-    socket.get('username', function(err, data){
-        delete playerList[data];
-    });
     io.emit('count', { playerCount: playerCount });
   });
 });

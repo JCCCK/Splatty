@@ -15,10 +15,10 @@ function preload() {
 
     game.load.tilemap('level1', '/resources/level1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles-1', '/resources/tiles-1.png');
-    game.load.spritesheet('dude1', '/resources/dude.png', 32, 48);
-    game.load.spritesheet('dude2', '/resources/dude2.png', 32, 48);
-    game.load.spritesheet('dude3', '/resources/dude3.png', 32, 48);
-    game.load.spritesheet('dude4', '/resources/dude4.png', 32, 48);
+    game.load.spritesheet('dude0', '/resources/dude.png', 32, 48);
+    game.load.spritesheet('dude1', '/resources/dude2.png', 32, 48);
+    game.load.spritesheet('dude2', '/resources/dude3.png', 32, 48);
+    game.load.spritesheet('dude3', '/resources/dude4.png', 32, 48);
     game.load.spritesheet('droid', '/resources/droid.png', 32, 32);
     game.load.image('starSmall', '/resources/star.png');
     game.load.image('starBig', '/resources/star2.png');
@@ -86,6 +86,7 @@ function create() {
     //PLAYERS
     for(var i = 0; i < PLAYER_MAX; i++){
         var spritePath = i % 4;
+            console.log(spritePath);
             spritePath = 'dude' + spritePath;
         players[i] = game.make.sprite(spritePath);
         game.physics.enable(players[i], Phaser.Physics.ARCADE);
