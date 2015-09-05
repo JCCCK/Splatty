@@ -97,6 +97,16 @@ function update() {
     if (game.input.activePointer.isDown) {
         fire();
     }
+    if (game.input.mousePointer.x > player.world.x) {
+        if (facing != 'right' && (!aKey.isDown && !cursors.left.isDown)) {
+            player.frame = 5;
+        }
+    }
+    else {
+        if (facing != 'left' && (!dKey.isDown && !cursors.right.isDown)) {
+            player.frame = 0;
+        }
+    }
 }
 function fire() {
     if (game.time.now > nextFire && bullets.countDead() > 0) {

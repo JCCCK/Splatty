@@ -139,6 +139,16 @@ function update() {
         fire();
     }
 
+    if (game.input.mousePointer.x > player.world.x) {
+        if (facing != 'right' && (!aKey.isDown && !cursors.left.isDown)) {
+            player.frame = 5;
+        }
+    }
+    else {
+        if (facing != 'left' && (!dKey.isDown && !cursors.right.isDown)) {
+            player.frame = 0;
+        }
+    }
 }
 
 function fire() {
