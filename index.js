@@ -1,8 +1,10 @@
 
 var express = require('express'),
     io = require('socket.io'),
+    http = require('http'),
+    path = require('path'),
     Game = require('./game.js');
-    
+
 var app = express();
 
 app.set('port', (process.env.PORT || 5000));
@@ -17,6 +19,12 @@ app.get('/', function(request, response) {
 });
 
 
-app.listen(app.get('port'), function() {
+var server = http.createServer(app);
+server.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
+
+var sockets = io.listen(server);
+
+var game = new Game(sockets);
+game.start();
