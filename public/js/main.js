@@ -1,18 +1,13 @@
-
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update, render: render });
-
 function preload() {
-
-    game.load.tilemap('level1', 'public/resouces/level1.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.image('tiles-1', 'public/resouces/tiles-1.png');
-    game.load.spritesheet('dude', 'public/resouces/dude.png', 32, 48);
-    game.load.spritesheet('droid', 'public/resouces/droid.png', 32, 32);
-    game.load.image('starSmall', 'public/resouces/star.png');
-    game.load.image('starBig', 'public/resouces/star2.png');
-    game.load.image('background', 'public/resouces/background2.png');
-
+    game.load.tilemap('level1', 'resouces/level1.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.image('tiles-1', 'resouces/tiles-1.png');
+    game.load.spritesheet('dude', 'resouces/dude.png', 32, 48);
+    game.load.spritesheet('droid', 'resouces/droid.png', 32, 32);
+    game.load.image('starSmall', 'resouces/star.png');
+    game.load.image('starBig', 'resouces/star2.png');
+    game.load.image('background', 'resouces/background2.png');
 }
-
 var map;
 var tileset;
 var layer;
@@ -22,116 +17,65 @@ var jumpTimer = 0;
 var cursors;
 var jumpButton;
 var bg;
-
 function create() {
-
     game.physics.startSystem(Phaser.Physics.ARCADE);
-
     game.stage.backgroundColor = '#000000';
-
     bg = game.add.tileSprite(0, 0, 800, 600, 'background');
     bg.fixedToCamera = true;
-
     map = game.add.tilemap('level1');
-
     map.addTilesetImage('tiles-1');
-
-    map.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
-
+    map.setCollisionByExclusion([13, 14, 15, 16, 46, 47, 48, 49, 50, 51]);
     layer = map.createLayer('Tile Layer 1');
-
-    //  Un-comment this on to see the collision tiles
-    // layer.debug = true;
-
     layer.resizeWorld();
-
     game.physics.arcade.gravity.y = 250;
-
     player = game.add.sprite(32, 32, 'dude');
     game.physics.enable(player, Phaser.Physics.ARCADE);
-
     player.body.bounce.y = 0.2;
     player.body.collideWorldBounds = true;
     player.body.setSize(20, 32, 5, 16);
-
     player.animations.add('left', [0, 1, 2, 3], 10, true);
     player.animations.add('turn', [4], 20, true);
     player.animations.add('right', [5, 6, 7, 8], 10, true);
-
     game.camera.follow(player);
-
     cursors = game.input.keyboard.createCursorKeys();
     jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-
 }
-
 function update() {
-
     game.physics.arcade.collide(player, layer);
-
     player.body.velocity.x = 0;
-
-    if (cursors.left.isDown)
-    {
+    if (cursors.left.isDown) {
         player.body.velocity.x = -150;
-
-        if (facing != 'left')
-        {
+        if (facing != 'left') {
             player.animations.play('left');
             facing = 'left';
         }
     }
-    else if (cursors.right.isDown)
-    {
+    else if (cursors.right.isDown) {
         player.body.velocity.x = 150;
-
-        if (facing != 'right')
-        {
+        if (facing != 'right') {
             player.animations.play('right');
             facing = 'right';
         }
     }
-    else
-    {
-        if (facing != 'idle')
-        {
+    else {
+        if (facing != 'idle') {
             player.animations.stop();
-
-            if (facing == 'left')
-            {
+            if (facing == 'left') {
                 player.frame = 0;
             }
-            else
-            {
+            else {
                 player.frame = 5;
             }
-
             facing = 'idle';
         }
     }
-
-    if (jumpButton.isDown && player.body.onFloor() && game.time.now > jumpTimer)
-    {
+    if (jumpButton.isDown && player.body.onFloor() && game.time.now > jumpTimer) {
         player.body.velocity.y = -250;
         jumpTimer = game.time.now + 750;
     }
-
 }
-
-function render () {
-
+function render() {
     // game.debug.text(game.time.physicsElapsed, 32, 32);
     // game.debug.body(player);
     // game.debug.bodyInfo(player, 16, 24);
-
 }
-
-//GarageServerIO.initializeGarageServer('insertmygameserverurlhere.com', { /* options */ });
-
-// Inside game loop...
-//GarageServerIO.addInput(/*player input - in this example 'left' or 'right'*/);
-
-// var playerStates = GarageServerIO.getPlayerStates();
-// playerStates.forEach(function (player) {
-//     ctxCanvas.fillRect(player.state.x, 0, 5, 5);
-// });
