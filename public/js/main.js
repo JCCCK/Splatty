@@ -13,6 +13,7 @@ function preload() {
     game.load.image('starBig', '/resources/star2.png');
     game.load.image('background', '/resources/background2.png');
     game.load.image('bullet', '/resources/purple_ball.png');
+    game.load.image('gun', '/resources/gun.png');
 }
 var map;
 var tileset;
@@ -30,6 +31,7 @@ var dKey;
 var bullets;
 var fireRate = 200;
 var nextFire = 0;
+var gun;
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.stage.backgroundColor = '#000000';
@@ -60,6 +62,8 @@ function create() {
     aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
+    gun = game.add.sprite(0, 0, 'gun');
+    player.addChild(gun);
 }
 function update() {
     game.physics.arcade.collide(player, layer);
@@ -92,6 +96,7 @@ function update() {
     if (game.input.activePointer.isDown) {
         fire();
     }
+    gun.rotation = game.physics.arcade.angleToPointer(gun);
 }
 function fire() {
     if (game.time.now > nextFire && bullets.countDead() > 0) {

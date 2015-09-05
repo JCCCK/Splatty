@@ -19,6 +19,7 @@ function preload() {
     game.load.image('starBig', '/resources/star2.png');
     game.load.image('background', '/resources/background2.png');
     game.load.image('bullet', '/resources/purple_ball.png');
+    game.load.image('gun', '/resources/gun.png');
 
 }
 
@@ -42,6 +43,7 @@ var dKey;
 var bullets;
 var fireRate = 200;
 var nextFire = 0;
+var gun
 
 function create() {
 
@@ -94,6 +96,8 @@ function create() {
     wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
+    gun = game.add.sprite(0, 0, 'gun');
+    player.addChild(gun);
 }
 
 function update() {
@@ -144,6 +148,7 @@ function update() {
     if (game.input.activePointer.isDown) {
         fire();
     }
+    gun.rotation = game.physics.arcade.angleToPointer(gun);
 }
 
 function fire() {
