@@ -1,5 +1,11 @@
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update, render: render });
-
+var socket = io.connect('http://localhost:5000');
+//DELETE FROM HERE AFTER VERIFIED
+var UiPlayers = document.getElementById("players");
+socket.on('count', function (data) {
+      UiPlayers.innerHTML = 'Players: ' + data['playerCount'];
+});
+//DELETE UNTIL HERE
 function preload() {
 
     game.load.tilemap('level1', '/resources/level1.json', null, Phaser.Tilemap.TILED_JSON);

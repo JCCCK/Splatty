@@ -1,11 +1,14 @@
-
 var express = require('express'),
     io = require('socket.io'),
+    app = express(),
     http = require('http'),
     path = require('path'),
-    Game = require('./game.js');
+    Game = require('./game.js')
+    server = require('http').Server(app),
+    io = require('socket.io')(server);
 
-var app = express();
+var playerCount = 0;
+var id = 0;
 
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
@@ -19,30 +22,21 @@ app.get('/', function(request, response) {
 });
 
 
-var server = http.createServer(app);
 server.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
 
-var sockets = io.listen(server);
 
-var server = require('garageserver.io').createGarageServer(sockets, {/*options*/ });
-server.start();
+io.on('connection', function (socket) {
+  playerCount++;
+  id++;
+  setTimeout(function () {
+    socket.emit('connected', { playerId: id });
+    io.emit('count', { playerCount: playerCount });
+  }, 1500);
 
-// Inside game loop ...
-var players = server.getPlayers();
-
-players.forEach(function (player) {
-    var newState = {};
-    if (!player.state.x) {
-       player.state.x = 0;
-    }
-    for (i = 0; i < player.inputs.length; i ++) {
-        if (player.inputs[i].input === 'left') {
-            newState.x = player.state.x - (50 * deltaTime);
-        } else if (inputs[i].input === 'right') {
-            newState.x = player.state.x + (50 * deltaTime);
-        }
-    }
-    server.updatePlayerState(player.id, newState);
+  socket.on('disconnect', function () {
+    playerCount--;
+    io.emit('count', { playerCount: playerCount });
+  });
 });
