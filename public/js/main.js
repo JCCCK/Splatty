@@ -30,7 +30,7 @@ var wKey;
 var sKey;
 var dKey;
 var bullets;
-var fireRate = 100;
+var fireRate = 200;
 var nextFire = 0;
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -95,20 +95,15 @@ function create() {
 }
 function update() {
     game.physics.arcade.collide(player, layer);
+    game.physics.arcade.collide(bullets, layer, function (bullet, layer) {
+        bullet.kill();
+    });
     player.body.velocity.x = 0;
     if (cursors.left.isDown || aKey.isDown) {
         player.body.velocity.x = -150;
-        if (facing != 'left') {
-            player.animations.play('left');
-            facing = 'left';
-        }
     }
     else if (cursors.right.isDown || dKey.isDown) {
         player.body.velocity.x = 150;
-        if (facing != 'right') {
-            player.animations.play('right');
-            facing = 'right';
-        }
     }
     else {
         if (facing != 'idle') {
@@ -147,11 +142,20 @@ function fire() {
         nextFire = game.time.now + fireRate;
         var bullet = bullets.getFirstDead();
         bullet.reset(player.x + 10, player.y + 20);
-        game.physics.arcade.moveToPointer(bullet, 300);
+        game.physics.arcade.moveToPointer(bullet, 700);
     }
 }
 function render() {
-    // game.debug.text(game.time.physicsElapsed, 32, 32);
-    // game.debug.body(player);
-    // game.debug.bodyInfo(player, 16, 24);
+    if (game.input.x < player.x - game.camera.x) {
+        if (facing != 'left') {
+            player.animations.play('left');
+            facing = 'left';
+        }
+    }
+    else {
+        if (facing != 'right') {
+            player.animations.play('right');
+            facing = 'right';
+        }
+    }
 }
