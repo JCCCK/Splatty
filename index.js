@@ -1,4 +1,3 @@
-
 var express = require('express'),
     io = require('socket.io'),
     http = require('http'),
@@ -6,7 +5,6 @@ var express = require('express'),
     Game = require('./game.js');
 
 var app = express();
-
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
 
@@ -24,13 +22,21 @@ server.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
 
-var sockets = io.listen(server);
 
-var server = require('garageserver.io').createGarageServer(sockets, {/*options*/ });
-server.start();
+var sockets = io.listen(server);
+var serverInit = require('garageserver.io');
+var gameServer = serverInit.createGarageServer(sockets,
+    {
+        interpolation: true,
+        clientSidePrediction: true,
+        worldState: { width: '400px', height: '400px'}
+    });
+
+gameServer.start();
 
 // Inside game loop ...
-var players = server.getPlayers();
+var players = gameServer.getPlayers();
+    entities = gameServer.getEntities();
 
 players.forEach(function (player) {
     var newState = {};
@@ -44,5 +50,9 @@ players.forEach(function (player) {
             newState.x = player.state.x + (50 * deltaTime);
         }
     }
-    server.updatePlayerState(player.id, newState);
+    gameServer.updatePlayerState(player.id, newState);
+});
+entities.forEach(function (entity) {
+    // Calculate new state from entity.state and send GarageServer.IO new state
+    gameServer.updateEntityState(entity.id, newState);
 });
