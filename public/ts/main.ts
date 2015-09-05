@@ -32,6 +32,7 @@ var tileset;
 var layer;
 var userPlayer = 0;
 var players = []; //array of all players in session EXCEPT current player
+var PLAYER_MAX = 4; //max number of players that can be in the game
 var facing = 'left';
 var jumpTimer = 0;
 var bg;
@@ -83,7 +84,7 @@ function create() {
     bullets.setAll('outOfBoundsKill', true);
 
     //PLAYERS
-    for(var i = 0; i < 4; i++){
+    for(var i = 0; i < PLAYER_MAX; i++){
         var spritePath = i % 4;
             spritePath = 'dude' + spritePath;
         players[i] = game.make.sprite(spritePath);

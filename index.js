@@ -46,7 +46,7 @@ io.on('connection', function (socket) {
         });
         io.emit('newPlayerwithPos', data)
     });
-    io.on('playerImpulse', function(data){
+    socket.on('playerImpulse', function(data){
         console.log("pushingQueue!");
         impulseQueue.push(data);
         console.log("clearingQueue!");

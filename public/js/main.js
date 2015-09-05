@@ -28,6 +28,7 @@ var tileset;
 var layer;
 var userPlayer = 0;
 var players = [];
+var PLAYER_MAX = 4;
 var facing = 'left';
 var jumpTimer = 0;
 var bg;
@@ -57,7 +58,7 @@ function create() {
     bullets.createMultiple(50, 'bullet');
     bullets.setAll('checkWorldBounds', true);
     bullets.setAll('outOfBoundsKill', true);
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < PLAYER_MAX; i++) {
         var spritePath = i % 4;
         spritePath = 'dude' + spritePath;
         players[i] = game.make.sprite(spritePath);
