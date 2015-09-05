@@ -15,9 +15,13 @@ var layer;
 var player;
 var facing = 'left';
 var jumpTimer = 0;
-var cursors;
-var jumpButton;
 var bg;
+var cursors;
+var spacebar;
+var aKey;
+var wKey;
+var sKey;
+var dKey;
 var bullets;
 var fireRate = 100;
 var nextFire = 0;
@@ -47,19 +51,22 @@ function create() {
     player.animations.add('right', [5, 6, 7, 8], 10, true);
     game.camera.follow(player);
     cursors = game.input.keyboard.createCursorKeys();
-    jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
+    wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
+    dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
 }
 function update() {
     game.physics.arcade.collide(player, layer);
     player.body.velocity.x = 0;
-    if (cursors.left.isDown) {
+    if (cursors.left.isDown || aKey.isDown) {
         player.body.velocity.x = -150;
         if (facing != 'left') {
             player.animations.play('left');
             facing = 'left';
         }
     }
-    else if (cursors.right.isDown) {
+    else if (cursors.right.isDown || dKey.isDown) {
         player.body.velocity.x = 150;
         if (facing != 'right') {
             player.animations.play('right');
@@ -78,7 +85,7 @@ function update() {
             facing = 'idle';
         }
     }
-    if (jumpButton.isDown && player.body.onFloor() && game.time.now > jumpTimer) {
+    if ((spacebar.isDown || cursors.up.isDown || wKey.isDown) && player.body.onFloor() && game.time.now > jumpTimer) {
         player.body.velocity.y = -300;
         jumpTimer = game.time.now + 750;
     }
