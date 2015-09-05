@@ -3,13 +3,13 @@ var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preloa
 
 function preload() {
 
-    game.load.tilemap('level1', 'resouces/level1.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.image('tiles-1', 'resouces/tiles-1.png');
-    game.load.spritesheet('dude', 'resouces/dude.png', 32, 48);
-    game.load.spritesheet('droid', 'resouces/droid.png', 32, 32);
-    game.load.image('starSmall', 'resouces/star.png');
-    game.load.image('starBig', 'resouces/star2.png');
-    game.load.image('background', 'resouces/background2.png');
+    game.load.tilemap('level1', '/resouces/level1.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.image('tiles-1', '/resouces/tiles-1.png');
+    game.load.spritesheet('dude', '/resouces/dude.png', 32, 48);
+    game.load.spritesheet('droid', '/resouces/droid.png', 32, 32);
+    game.load.image('starSmall', '/resouces/star.png');
+    game.load.image('starBig', '/resouces/star2.png');
+    game.load.image('background', '/resouces/background2.png');
 
 }
 
