@@ -29,14 +29,14 @@ var gameServer = serverInit.createGarageServer(sockets,
     {
         interpolation: true,
         clientSidePrediction: true,
-        worldState: { width: '400px', height: '400px'}
+        worldState: { width: '720px', height: '480px'}
     });
 
 gameServer.start();
 
-// Inside game loop ...
-var players = gameServer.getPlayers();
-    entities = gameServer.getEntities();
+    // Inside game loop ...
+    var players = gameServer.getPlayers();
+        entities = gameServer.getEntities();
 
 players.forEach(function (player) {
     var newState = {};
