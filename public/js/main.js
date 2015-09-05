@@ -27,10 +27,9 @@ function create() {
     map.setCollisionByExclusion([13, 14, 15, 16, 46, 47, 48, 49, 50, 51]);
     layer = map.createLayer('Tile Layer 1');
     layer.resizeWorld();
-    game.physics.arcade.gravity.y = 250;
+    game.physics.arcade.gravity.y = 500;
     player = game.add.sprite(32, 32, 'dude');
     game.physics.enable(player, Phaser.Physics.ARCADE);
-    player.body.bounce.y = 0.2;
     player.body.collideWorldBounds = true;
     player.body.setSize(20, 32, 5, 16);
     player.animations.add('left', [0, 1, 2, 3], 10, true);
@@ -70,7 +69,7 @@ function update() {
         }
     }
     if (jumpButton.isDown && player.body.onFloor() && game.time.now > jumpTimer) {
-        player.body.velocity.y = -250;
+        player.body.velocity.y = -300;
         jumpTimer = game.time.now + 750;
     }
 }
