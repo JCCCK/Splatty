@@ -91,18 +91,6 @@ function create() {
         newplayer.animations.add('turn', [4], 20, true);
         newplayer.animations.add('right', [5, 6, 7, 8], 10, true);
     });
-    socket.on('posUpdate', function (data) {
-        console.log("posUpdate!");
-        data = data.data;
-        for (var playerData in data) {
-            var player = {};
-            player.name = data[playerData].sessionID;
-            player.x = data[playerData].x;
-            player.y = data[playerData].y;
-            player.angle = data[playerData].angle;
-            players[player.name] = player;
-        }
-    });
 }
 function update() {
     game.physics.arcade.collide(player, layer);
