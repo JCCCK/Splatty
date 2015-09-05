@@ -37,7 +37,7 @@ var dKey;
 
 //shooting stuff
 var bullets;
-var fireRate = 100;
+var fireRate = 200;
 var nextFire = 0;
 
 function create() {
@@ -96,6 +96,9 @@ function create() {
 function update() {
 
     game.physics.arcade.collide(player, layer);
+    game.physics.arcade.collide(bullets, layer, function(bullet, layer) {
+        bullet.kill();
+    });
 
     player.body.velocity.x = 0;
 
@@ -149,7 +152,7 @@ function fire() {
 
         bullet.reset(player.x + 10, player.y + 20);
 
-        game.physics.arcade.moveToPointer(bullet, 300);
+        game.physics.arcade.moveToPointer(bullet, 700);
     }
 
 }
