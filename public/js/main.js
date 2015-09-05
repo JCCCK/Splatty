@@ -126,12 +126,12 @@ function render () {
 
 }
 
-GarageServerIO.initializeGarageServer('insertmygameserverurlhere.com', { /* options */ });
+//GarageServerIO.initializeGarageServer('insertmygameserverurlhere.com', { /* options */ });
 
 // Inside game loop...
-GarageServerIO.addInput(/*player input - in this example 'left' or 'right'*/);
+//GarageServerIO.addInput(/*player input - in this example 'left' or 'right'*/);
 
-var playerStates = GarageServerIO.getPlayerStates();
-playerStates.forEach(function (player) {
-    ctxCanvas.fillRect(player.state.x, 0, 5, 5);
-});
+// var playerStates = GarageServerIO.getPlayerStates();
+// playerStates.forEach(function (player) {
+//     ctxCanvas.fillRect(player.state.x, 0, 5, 5);
+// });
