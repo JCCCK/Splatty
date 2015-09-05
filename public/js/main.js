@@ -66,6 +66,7 @@ function create() {
         y: game.world.centerY,
         angle: 0
     });
+    socket.emit('newPos', pos);
     cursors = game.input.keyboard.createCursorKeys();
     spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
@@ -121,6 +122,16 @@ function update() {
     if (game.input.activePointer.isDown) {
         fire();
     }
+    socket.on('updatePos', function (data) {
+        for (var playerData in data) {
+            var player = {};
+            player.name = data[playerData].sessionID;
+            player.x = data[playerData].x;
+            player.y = data[playerData].y;
+            player.angle = data[playerData].angle;
+            players[player.name] = player;
+        }
+    });
 }
 function fire() {
     if (game.time.now > nextFire && bullets.countDead() > 0) {

@@ -97,6 +97,7 @@ function create() {
         y: game.world.centerY,
         angle: 0
     });
+    socket.emit('newPos', pos);
 
     cursors = game.input.keyboard.createCursorKeys();
     spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -123,6 +124,7 @@ function create() {
 }
 
 function update() {
+
 
     game.physics.arcade.collide(player, layer);
 
@@ -167,6 +169,21 @@ function update() {
     if (game.input.activePointer.isDown) {
         fire();
     }
+
+    //grab new players
+    socket.on('updatePos', function(data) {
+        for(var playerData in data) {
+
+            // update array of players
+            var player = {};
+            player.name = data[playerData].sessionID;
+            player.x = data[playerData].x;
+            player.y = data[playerData].y;
+            player.angle = data[playerData].angle;
+
+            players[player.name] = player;
+        }
+    });
 
 }
 
