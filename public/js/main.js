@@ -1,5 +1,10 @@
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update, render: render });
 var socket = io.connect('https://secret-temple-3770.herokuapp.com/');
+var sessionID = "";
+socket.on('connect', function () {
+    sessionID = socket.io.engine.id;
+    console.log(sessionID);
+});
 var UiPlayers = document.getElementById("players");
 socket.on('count', function (data) {
     UiPlayers.innerHTML = 'Players: ' + data['playerCount'];
@@ -55,11 +60,30 @@ function create() {
     player.animations.add('turn', [4], 20, true);
     player.animations.add('right', [5, 6, 7, 8], 10, true);
     game.camera.follow(player);
+    var pos = JSON.stringify({
+        sessid: sessionID,
+        x: game.world.centerX,
+        y: game.world.centerY,
+        angle: 0
+    });
     cursors = game.input.keyboard.createCursorKeys();
     spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
+    socket.on('newPlayerwithPos', function (data) {
+        var obj = JSON.parse(data);
+        var xNew = obj.x;
+        var yNew = obj.y;
+        console.log(xNew, yNew);
+        var p = game.add.sprite(xNew, yNew, 'player');
+        p.anchor.setTo(.5, .5);
+        p.animations.add('fly');
+        p.animations.play('fly', 10, true);
+        game.physics.enable(p, Phaser.Physics.ARCADE);
+        p.enableBody = true;
+        p.body.collideWorldBounds = true;
+    });
 }
 function update() {
     game.physics.arcade.collide(player, layer);
