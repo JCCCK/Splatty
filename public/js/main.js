@@ -97,16 +97,16 @@ function update() {
     if (game.input.activePointer.isDown) {
         fire();
     }
-    if (game.input.mousePointer.x > player.world.x) {
-        if (facing != 'right' && (!aKey.isDown && !cursors.left.isDown)) {
-            player.animations.play('right');
-            facing = 'right';
+    if (game.input.activePointer.x < player.x) {
+        if (facing != 'left' && (!aKey.isDown && !cursors.right.isDown)) {
+            player.animations.play('left');
+            facing = 'left';
         }
     }
     else {
-        if (facing != 'left' && (!dKey.isDown && !cursors.right.isDown)) {
-            player.animations.play('left');
-            facing = 'left';
+        if (facing != 'right' && (!dKey.isDown && !cursors.left.isDown)) {
+            player.animations.play('right');
+            facing = 'right';
         }
     }
 }
