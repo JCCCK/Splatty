@@ -10,7 +10,8 @@
     "ejs": "2.3.3",
     "express": "4.13.3",
     "garageserver.io": "^0.6.0",
-    "phaser": "^2.4.3"
+    "phaser": "^2.4.3",
+    "skeleton-css": "^2.0.4"
   },
   "engines": {
     "node": "0.12.7"
