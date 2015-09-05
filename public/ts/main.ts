@@ -1,6 +1,5 @@
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update, render: render });
 var socket = io.connect('localhost:5000');
-var Players;
 var sessionID = "";
 socket.on('connect', function (data) {
     sessionID = socket.io.engine.id
@@ -23,6 +22,7 @@ var map;
 var tileset;
 var layer;
 var player;
+var players = []; //array of all players in session
 var facing = 'left';
 var jumpTimer = 0;
 var bg;
@@ -188,14 +188,12 @@ function update() {
         console.log("posUpdate!");
         data = data.data;
         for(var playerData in data) {
-
             // update array of players
             var player = {};
             player.name = data[playerData].sessionID;
             player.x = data[playerData].x;
             player.y = data[playerData].y;
             player.angle = data[playerData].angle;
-
             players[player.name] = player;
         }
     });
