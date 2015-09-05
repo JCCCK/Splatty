@@ -1,5 +1,8 @@
 
-var express = require('express');
+var express = require('express'),
+    io = require('socket.io'),
+    Game = require('./game.js');
+    
 var app = express();
 
 app.set('port', (process.env.PORT || 5000));
