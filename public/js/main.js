@@ -62,7 +62,7 @@ function create() {
     aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
-    gun = game.add.sprite(0, 0, 'gun');
+    gun = game.add.sprite(10, 40, 'gun');
     player.addChild(gun);
 }
 function update() {
