@@ -15,6 +15,7 @@ function preload() {
     game.load.image('starSmall', '/resources/star.png');
     game.load.image('starBig', '/resources/star2.png');
     game.load.image('background', '/resources/background2.png');
+    game.load.image('bullet', '/resources/purple_ball.png');
 
 }
 
@@ -24,9 +25,20 @@ var layer;
 var player;
 var facing = 'left';
 var jumpTimer = 0;
-var cursors;
-var jumpButton;
 var bg;
+
+//keys
+var cursors;
+var spacebar;
+var aKey;
+var wKey;
+var sKey;
+var dKey;
+
+//shooting stuff
+var bullets;
+var fireRate = 100;
+var nextFire = 0;
 
 function create() {
 
@@ -52,6 +64,15 @@ function create() {
 
     game.physics.arcade.gravity.y = 500;
 
+    //shooting
+    bullets = game.add.group();
+    bullets.enableBody = true;
+    bullets.physicsBodyType = Phaser.Physics.ARCADE;
+
+    bullets.createMultiple(50, 'bullet');
+    bullets.setAll('checkWorldBounds', true);
+    bullets.setAll('outOfBoundsKill', true);
+
     player = game.add.sprite(32, 32, 'dude');
     game.physics.enable(player, Phaser.Physics.ARCADE);
 
@@ -65,7 +86,10 @@ function create() {
     game.camera.follow(player);
 
     cursors = game.input.keyboard.createCursorKeys();
-    jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
+    wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
+    dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
 }
 
@@ -75,38 +99,30 @@ function update() {
 
     player.body.velocity.x = 0;
 
-    if (cursors.left.isDown)
-    {
+    if (cursors.left.isDown || aKey.isDown) {
         player.body.velocity.x = -150;
 
-        if (facing != 'left')
-        {
+        if (facing != 'left') {
             player.animations.play('left');
             facing = 'left';
         }
     }
-    else if (cursors.right.isDown)
-    {
+    else if (cursors.right.isDown || dKey.isDown) {
         player.body.velocity.x = 150;
 
-        if (facing != 'right')
-        {
+        if (facing != 'right') {
             player.animations.play('right');
             facing = 'right';
         }
     }
-    else
-    {
-        if (facing != 'idle')
-        {
+    else {
+        if (facing != 'idle') {
             player.animations.stop();
 
-            if (facing == 'left')
-            {
+            if (facing == 'left') {
                 player.frame = 0;
             }
-            else
-            {
+            else {
                 player.frame = 5;
             }
 
@@ -114,10 +130,27 @@ function update() {
         }
     }
 
-    if (jumpButton.isDown && player.body.onFloor() && game.time.now > jumpTimer)
-    {
+    if ((spacebar.isDown || cursors.up.isDown || wKey.isDown) && player.body.onFloor() && game.time.now > jumpTimer) {
         player.body.velocity.y = -300;
         jumpTimer = game.time.now + 750;
+    }
+
+    if (game.input.activePointer.isDown) {
+        fire();
+    }
+
+}
+
+function fire() {
+
+    if (game.time.now > nextFire && bullets.countDead() > 0) {
+        nextFire = game.time.now + fireRate;
+
+        var bullet = bullets.getFirstDead();
+
+        bullet.reset(player.x + 10, player.y + 20);
+
+        game.physics.arcade.moveToPointer(bullet, 300);
     }
 
 }
