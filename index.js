@@ -8,6 +8,7 @@ var express = require('express'),
     io = require('socket.io')(server);
 
 var playerCount = 0;
+var playerList = [];
 var impulseQueue = [];
 var id = 0;
 
@@ -35,12 +36,15 @@ io.on('connection', function (socket) {
   setTimeout(function () {
     socket.emit('connect', id);
     io.emit('count', { playerCount: playerCount });
-    socket.emit('initialize', id);
-    socket.on('newPos', function(data){
-        console.log("fired!");
-        var d = data;
+    socket.emit('initialize', {id: id,
+                               p_list: playerList});
+    socket.on('newPlayer', function(data){
         console.log("newPlayer")
-        io.emit('newPlayerwithPos', {data: d})
+        console.log(data);
+        socket.set('playerID', data, function() {
+            playerList[data] = data;
+        });
+        io.emit('newPlayerwithPos', data)
     });
     io.on('playerImpulse', function(data){
         console.log("pushingQueue!");
@@ -55,8 +59,11 @@ io.on('connection', function (socket) {
     });
   }, 1500);
 
-  socket.on('disconnect', function () {
+  socket.on('disconnect', function(){
     playerCount--;
+    socket.get('username', function(err, data){
+        delete playerList[data];
+    });
     io.emit('count', { playerCount: playerCount });
   });
 });
