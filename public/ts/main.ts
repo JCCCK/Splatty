@@ -2,8 +2,13 @@ var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preloa
 var socket = io.connect('localhost:5000');
 var sessionID = "";
 socket.on('connect', function (data) {
-    sessionID = socket.io.engine.id
+    console.log(data);
+    sessionID = data;
     console.log(sessionID);
+});
+var UiPlayers = document.getElementById("players");
+socket.on('count', function (data) {
+      UiPlayers.innerHTML = 'Players: ' + data['playerCount'];
 });
 
 function preload() {
@@ -23,7 +28,7 @@ var map;
 var tileset;
 var layer;
 var player;
-var players = []; //array of all players in session
+var players = []; //array of all players in session EXCEPT current player
 var facing = 'left';
 var jumpTimer = 0;
 var bg;
@@ -77,7 +82,6 @@ function create() {
     player = game.add.sprite(32, 32, 'dude');
 
 
-
     game.physics.enable(player, Phaser.Physics.ARCADE);
 
     player.body.collideWorldBounds = true;
@@ -89,7 +93,6 @@ function create() {
 
     game.camera.follow(player);
 
-
     var pos = {
         sessid: sessionID,
         x: game.world.centerX,
@@ -99,46 +102,47 @@ function create() {
 
     console.log(pos);
 
-    socket.on('initialize', function(data){
-        console.log(data);
-        socket.emit('newPos', {pos: pos});
-        console.log("initialized");
-    });
-
-    var UiPlayers = document.getElementById("players");
-    socket.on('count', function (data) {
-          UiPlayers.innerHTML = 'Players: ' + data['playerCount'];
-    });
-
-
-
     cursors = game.input.keyboard.createCursorKeys();
     spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
+    socket.on('initialize', function(data){
+        console.log(data);
+        socket.emit('newPos', {pos: pos});
+        console.log("initialized");
+    });
+
     socket.on('newPlayerwithPos', function(data) {
         console.log("newPlayerAdded")
         var obj = data.data;
-        var xNew = obj.x;
-        var yNew = obj.y;
+        var newplayer = game.add.sprite(32, 32, 'dude');
+        game.physics.enable(newplayer, Phaser.Physics.ARCADE);
+        players.push[newplayer];
+        newplayer.body.collideWorldBounds = true;
+        newplayer.body.setSize(20, 32, 5, 16);
+        newplayer.animations.add('left', [0, 1, 2, 3], 10, true);
+        newplayer.animations.add('turn', [4], 20, true);
+        newplayer.animations.add('right', [5, 6, 7, 8], 10, true);
+    });
 
-        console.log(xNew, yNew);
-
-        var p = game.add.sprite(xNew, yNew, 'player');
-        p.anchor.setTo(.5,.5);
-        p.animations.add('fly');
-        p.animations.play('fly', 10, true);
-        game.physics.enable(p, Phaser.Physics.ARCADE);
-
-        p.enableBody = true;
-        p.body.collideWorldBounds = true;
+    socket.on('posUpdate', function(data) {
+        console.log("posUpdate!");
+        data = data.data;
+        for(var playerData in data) {
+            // update array of players
+            var player = {};
+            player.name = data[playerData].sessionID;
+            player.x = data[playerData].x;
+            player.y = data[playerData].y;
+            player.angle = data[playerData].angle;
+            players[player.name] = player;
+        }
     });
 }
 
 function update() {
-
 
     game.physics.arcade.collide(player, layer);
     game.physics.arcade.collide(bullets, layer, function(bullet, layer) {
@@ -189,19 +193,18 @@ function update() {
 
 
     //grab new players
-    socket.on('posUpdate', function(data) {
-        console.log("posUpdate!");
-        data = data.data;
-        for(var playerData in data) {
-            // update array of players
-            var player = {};
-            player.name = data[playerData].sessionID;
-            player.x = data[playerData].x;
-            player.y = data[playerData].y;
-            player.angle = data[playerData].angle;
-            players[player.name] = player;
-        }
-    });
+
+
+    //send new positional impulse data
+
+    var impulse = player.body.velocity;
+    console.log(player.body.velocity);
+    var vector = {
+         sessionID: sessionID;
+         impulse: player.body.velocity
+    }
+    socket.emit('playerImpulse', vector);
+
 
 }
 
@@ -213,8 +216,8 @@ function fire() {
         var bullet = bullets.getFirstDead();
 
         bullet.reset(player.x + 10, player.y + 20);
-
         game.physics.arcade.moveToPointer(bullet, 700);
+
     }
 
 }
