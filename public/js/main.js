@@ -66,17 +66,9 @@ function update() {
     player.body.velocity.x = 0;
     if (cursors.left.isDown || aKey.isDown) {
         player.body.velocity.x = -150;
-        if (facing != 'left') {
-            player.animations.play('left');
-            facing = 'left';
-        }
     }
     else if (cursors.right.isDown || dKey.isDown) {
         player.body.velocity.x = 150;
-        if (facing != 'right') {
-            player.animations.play('right');
-            facing = 'right';
-        }
     }
     else {
         if (facing != 'idle') {
@@ -97,18 +89,6 @@ function update() {
     if (game.input.activePointer.isDown) {
         fire();
     }
-    if (game.input.activePointer.x < player.x) {
-        if (facing != 'left' && (!aKey.isDown && !cursors.right.isDown)) {
-            player.animations.play('left');
-            facing = 'left';
-        }
-    }
-    else {
-        if (facing != 'right' && (!dKey.isDown && !cursors.left.isDown)) {
-            player.animations.play('right');
-            facing = 'right';
-        }
-    }
 }
 function fire() {
     if (game.time.now > nextFire && bullets.countDead() > 0) {
@@ -119,7 +99,16 @@ function fire() {
     }
 }
 function render() {
-    // game.debug.text(game.time.physicsElapsed, 32, 32);
-    // game.debug.body(player);
-    // game.debug.bodyInfo(player, 16, 24);
+    if (game.input.x < player.x - game.camera.x) {
+        if (facing != 'left') {
+            player.animations.play('left');
+            facing = 'left';
+        }
+    }
+    else {
+        if (facing != 'right') {
+            player.animations.play('right');
+            facing = 'right';
+        }
+    }
 }
