@@ -22,7 +22,7 @@ socket.on('count', function (data) {
 function preload() {
     //stop pausing game when you leave window
     this.stage.disableVisibilityChange = true;
-    
+
     //preload background
     game.load.image('background', '/resources/background.png');
 
@@ -47,5 +47,9 @@ function preload() {
     game.load.image('bullet1', '/resources/bullets/green_bullet.png');
     game.load.image('bullet2', '/resources/bullets/light_blue_bullet.png');
     game.load.image('bullet3', '/resources/bullets/purple_bullet.png');
+
+    //preload sounds
+    game.load.audio('jump_up', '/resources/sounds/jump_up.wav');
+    game.load.audio('jump_land', '/resources/sounds/jump_land.wav');
 
 }
