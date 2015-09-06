@@ -1,5 +1,5 @@
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update, render: render });
-var socket = io.connect('localhost:5000');
+var socket = io.connect('https://secret-temple-3770.herokuapp.com/');
 var sessionID = 0;
 socket.on('connect', function (data) {
     console.log(data);
@@ -11,7 +11,6 @@ socket.on('count', function (data) {
     UiPlayers.innerHTML = 'Players: ' + data['playerCount'];
 });
 function preload() {
-    this.stage.disableVisibilityChange = true;
     game.load.image('background', '/resources/background.png');
     game.load.tilemap('level1', '/resources/level/map.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles-default', '/resources/level/tiles-default.png');
