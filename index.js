@@ -58,13 +58,9 @@ io.on('connection', function (socket) {
         io.emit('newPlayerwithPos', data)
     });
     socket.on('playerImpulse', function(data){
-        impulseQueue.push(data);
-        for(i in impulseQueue){
-            k = impulseQueue[i];
+            k = data;
             playerPositions[k.playerID] = k.position;
             io.emit('updatedImpulse', k);
-            impulseQueue.shift();
-        }
     });
     socket.on('bulletImpulse', function(data){
         bulletQueue.push(data);
