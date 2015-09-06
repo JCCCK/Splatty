@@ -34,10 +34,6 @@ var pad3;
 var pad4;
 var indicator;
 
-//sounds
-var jump_up;
-var jump_land;
-
 function create(){
     //init physics
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -54,10 +50,6 @@ function create(){
     pad2 = game.input.gamepad.pad2;
     pad3 = game.input.gamepad.pad3;
     pad4 = game.input.gamepad.pad4;
-
-    //sounds
-    jump_up = game.add.audio('jump_up');
-    jump_land = game.add.audio('jump_land');
 
     //init buttons
     cursors = game.input.keyboard.createCursorKeys();
@@ -103,25 +95,25 @@ function create(){
             console.log(spritePath);
         playerSprites[i] = game.make.sprite(32, 32, spritePath);
     }
-
+    game.physics.arcade.collide(players, mainTileLayer);
 
 
     function addPlayer(data){
         console.log(data);
         var p_id = data.playerID;
-        game.physics.arcade.collide(players, mainTileLayer);
         console.log(p_id);
         if(sessionID != p_id){
             console.log("init!")
             players[p_id] = game.add.existing(playerSprites[p_id]);
             game.physics.enable(players[p_id], Phaser.Physics.ARCADE);
-            players[p_id].x = data.position.x;
-            players[p_id].y = data.position.y - 5;
             players[p_id].body.collideWorldBounds = true;
             players[p_id].body.setSize(20, 32, 5, 16);
             players[p_id].animations.add('left', [0, 1, 2, 3], 10, true);
             players[p_id].animations.add('turn', [4], 20, true);
             players[p_id].animations.add('right', [5, 6, 7, 8], 10, true);
+            players[p_id].x = data.position.x;
+            players[p_id].y = data.position.y - 5;
+            //spawn in offscreen, then wait for positional update
         }
     }
 
@@ -166,14 +158,6 @@ function create(){
         console.log("newPlayerAdded")
         addPlayer(data);
     });
-
-    socket.on('jettison', function(data) {
-        console.log(data);
-        console.log("jettisoned!");
-        players[data].kill();
-    });
-
-
 
 
 }
