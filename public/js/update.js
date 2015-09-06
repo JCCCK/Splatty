@@ -44,6 +44,8 @@ function update() {
             cursors.up.isDown ||
             wKey.isDown ||
             pad1.justPressed(Phaser.Gamepad.XBOX360_A) ||
+            pad1.isDown(Phaser.Gamepad.XBOX360_LEFT_TRIGGER) ||
+            pad1.isDown(Phaser.Gamepad.XBOX360_RIGHT_TRIGGER) ||
             pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_UP)) &&
             players[sessionID].body.onFloor() &&
             game.time.now > jumpTimer) {
