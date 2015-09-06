@@ -100,6 +100,7 @@ function update() {
                 y: game.input.mousePointer.y,
                 playerID: sessionID
             };
+            splash.play();
             socket.emit('bulletImpulse', bulletTarget);
         }
     }
