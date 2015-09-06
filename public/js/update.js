@@ -4,6 +4,7 @@ function update() {
     game.physics.arcade.collide(players, mainTileLayer);
     game.physics.arcade.collide(bullets, mainTileLayer, function (bullet, mainTileLayer) {
         bullet.kill();
+        splash.play();
         var changeFactor = ((bullet.playerID % 4) + 1) * 100;
         var newKey = mainTileLayer.index + changeFactor;
         map.putTile(newKey, mainTileLayer.x, mainTileLayer.y, splatterTileLayer);

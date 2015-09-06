@@ -9,6 +9,7 @@ function update() {
     game.physics.arcade.collide(bullets, mainTileLayer, function (bullet, mainTileLayer) {
         //bullet collided, destroy it
         bullet.kill();
+        splash.play();
 
         //figure out what color to change the wall to
         var changeFactor = ((bullet.playerID % 4)+1) * 100;

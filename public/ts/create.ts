@@ -39,6 +39,7 @@ var indicator;
 //sounds
 var jump_up;
 var jump_land;
+var splash;
 
 function create(){
     //init physics
@@ -60,6 +61,7 @@ function create(){
     //sounds
     jump_up = game.add.audio('jump_up');
     jump_land = game.add.audio('jump_land');
+    splash = game.add.audio('splash');
 
     //init buttons
     cursors = game.input.keyboard.createCursorKeys();
