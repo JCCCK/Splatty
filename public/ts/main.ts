@@ -20,6 +20,9 @@ socket.on('count', function (data) {
 
 //preload
 function preload() {
+    //stop pausing game when you leave window
+    this.stage.disableVisibilityChange = true;
+    
     //preload background
     game.load.image('background', '/resources/background.png');
 

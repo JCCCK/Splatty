@@ -1,5 +1,4 @@
 var map;
-var tileset;
 var layer;
 var mainTileLayer;
 var splatterTileLayer;
@@ -44,6 +43,11 @@ function create() {
     map.setCollisionByExclusion([13, 14, 15, 16, 46, 47, 48, 49, 50, 51]);
     mainTileLayer = map.createLayer('Tile Layer 1');
     mainTileLayer.resizeWorld();
+    map.addTilesetImage('tiles-dark-blue');
+    map.addTilesetImage('tiles-green');
+    map.addTilesetImage('tiles-light-blue');
+    map.addTilesetImage('tiles-purple');
+    splatterTileLayer = map.createBlankLayer('Tile Layer 2', 64, 64, 16, 16);
     bullets = game.add.group();
     bullets.enableBody = true;
     bullets.physicsBodyType = Phaser.Physics.ARCADE;

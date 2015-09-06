@@ -2,6 +2,7 @@ function update() {
     game.physics.arcade.collide(players, mainTileLayer);
     game.physics.arcade.collide(bullets, mainTileLayer, function (bullet, mainTileLayer) {
         bullet.kill();
+        map.putTile(401, mainTileLayer.x, mainTileLayer.y, splatterTileLayer);
     });
     if (!(players[sessionID] === undefined)) {
         players[sessionID].body.velocity.x = 0;

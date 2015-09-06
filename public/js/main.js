@@ -11,6 +11,7 @@ socket.on('count', function (data) {
     UiPlayers.innerHTML = 'Players: ' + data['playerCount'];
 });
 function preload() {
+    this.stage.disableVisibilityChange = true;
     game.load.image('background', '/resources/background.png');
     game.load.tilemap('level1', '/resources/level/map.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles-default', '/resources/level/tiles-default.png');
