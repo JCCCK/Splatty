@@ -21,6 +21,7 @@
         "!./node_modules/**/*"
     ],
     "files": [
+        "./create.ts",
         "./definitions/p2.d.ts",
         "./definitions/phaser.comments.d.ts",
         "./definitions/phaser.d.ts",
@@ -28,6 +29,8 @@
         "./definitions/pixi.d.ts",
         "./definitions/socket.io-client.d.ts",
         "./definitions/socket.io.d.ts",
-        "./main.ts"
+        "./main.ts",
+        "./render.ts",
+        "./update.ts"
     ]
 }
