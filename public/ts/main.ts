@@ -88,7 +88,7 @@ function create() {
             console.log(spritePath);
             spritePath = 'dude' + spritePath;
             console.log(spritePath);
-        playerSprites[i] = game.make.sprite(spritePath);
+        playerSprites[i] = game.make.sprite(32, 32, spritePath);
     }
 
     function addPlayer(p_id){
