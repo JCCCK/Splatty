@@ -4,7 +4,7 @@ function update() {
     game.physics.arcade.collide(players, mainTileLayer);
     game.physics.arcade.collide(bullets, mainTileLayer, function (bullet, mainTileLayer) {
         bullet.kill();
-        var changeFactor = ((sessionID % 4) + 1) * 100;
+        var changeFactor = ((bullet.playerID % 4) + 1) * 100;
         map.putTile(mainTileLayer.index + changeFactor, mainTileLayer.x, mainTileLayer.y, splatterTileLayer);
     });
     if (!(players[sessionID] === undefined)) {
@@ -54,6 +54,7 @@ function update() {
     socket.on('firedProjectile', function (data) {
         if (data.playerID != sessionID) {
             var bullet = bullets.getFirstDead();
+            bullet.playerID = data.playerID;
             bullet.reset(players[data.playerID].x + 10, players[data.playerID].y + 20);
             game.physics.arcade.moveToXY(bullet, data.x, data.y, 700);
         }
@@ -72,6 +73,7 @@ function update() {
             else {
                 game.physics.arcade.moveToPointer(bullet, 700);
             }
+            bullet.playerID = sessionID;
             bulletTarget = {
                 x: game.input.mousePointer.x,
                 y: game.input.mousePointer.y,
