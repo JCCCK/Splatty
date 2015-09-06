@@ -30,7 +30,7 @@ function create() {
     wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
     map = game.add.tilemap('level1');
-    map.addTilesetImage('tiles-1');
+    map.addTilesetImage('tiles-default');
     map.setCollisionByExclusion([13, 14, 15, 16, 46, 47, 48, 49, 50, 51]);
     mainTileLayer = map.createLayer('Tile Layer 1');
     mainTileLayer.resizeWorld();

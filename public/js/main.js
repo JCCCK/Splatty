@@ -13,7 +13,11 @@ socket.on('count', function (data) {
 function preload() {
     game.load.image('background', '/resources/background.png');
     game.load.tilemap('level1', '/resources/level/map.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.image('tiles-1', '/resources/level/tiles-default.png');
+    game.load.image('tiles-default', '/resources/level/tiles-default.png');
+    game.load.image('tiles-dark-blue', '/resources/level/tiles-dark-blue.png');
+    game.load.image('tiles-green', '/resources/level/tiles-green.png');
+    game.load.image('tiles-light-blue', '/resources/level/tiles-light-blue.png');
+    game.load.image('tiles-purple', '/resources/level/tiles-purple.png');
     game.load.spritesheet('dude0', '/resources/dudes/dark_blue_dude.png', 32, 48);
     game.load.spritesheet('dude1', '/resources/dudes/green_dude.png', 32, 48);
     game.load.spritesheet('dude2', '/resources/dudes/light_blue_dude.png', 32, 48);

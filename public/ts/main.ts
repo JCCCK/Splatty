@@ -25,8 +25,13 @@ function preload() {
 
     //preload tilemap
     game.load.tilemap('level1', '/resources/level/map.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.image('tiles-1', '/resources/level/tiles-default.png');
 
+    //preload tile sets
+    game.load.image('tiles-default', '/resources/level/tiles-default.png');
+    game.load.image('tiles-dark-blue', '/resources/level/tiles-dark-blue.png');
+    game.load.image('tiles-green', '/resources/level/tiles-green.png');
+    game.load.image('tiles-light-blue', '/resources/level/tiles-light-blue.png');
+    game.load.image('tiles-purple', '/resources/level/tiles-purple.png');
 
     //preload character
     game.load.spritesheet('dude0', '/resources/dudes/dark_blue_dude.png', 32, 48);

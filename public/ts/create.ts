@@ -47,10 +47,14 @@ function create(){
 
     //init tilemap
     map = game.add.tilemap('level1');
-    map.addTilesetImage('tiles-1');
+    map.addTilesetImage('tiles-default');
     map.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
     mainTileLayer = map.createLayer('Tile Layer 1');
+
     mainTileLayer.resizeWorld();
+
+    // splatterTileLayer = map.createLayer('Tile Layer 1');
+
     //Un-comment this on to see the collision tiles
     //layer.debug = true;
 
