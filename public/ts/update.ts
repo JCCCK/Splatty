@@ -1,4 +1,6 @@
 function update() {
+  var rightStickX1 = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
+  var rightStickY1 = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
     game.physics.arcade.collide(players, mainTileLayer);
     game.physics.arcade.collide(bullets, mainTileLayer, function (bullet, mainTileLayer) {
         bullet.kill();
@@ -29,33 +31,8 @@ function update() {
             players[sessionID].body.velocity.y = -300;
             jumpTimer = game.time.now + 750;
         }
-        if (pad1.connected) {
-            var rightStickX1 = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
-            var rightStickY1 = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
-              if (rightStickX1 || rightStickY1) {
-                fire();
-              }
-        }
-        if (pad2.connected) {
-            var rightStickX2 = pad2.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
-            var rightStickY2 = pad2.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
-              if (rightStickX2 || rightStickY2) {
-                fire();
-              }
-        }
-        if (pad3.connected) {
-            var rightStickX3 = pad3.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
-            var rightStickY3 = pad3.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
-              if (rightStickX3 || rightStickY3) {
-                fire();
-              }
-        }
-        if (pad4.connected) {
-            var rightStickX4 = pad4.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
-            var rightStickY4 = pad4.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
-              if (rightStickX4 || rightStickY4) {
-                fire();
-              }
+        if (rightStickX1 || rightStickY1) {
+          fire();
         }
         if (game.input.activePointer.isDown) {
             fire();
@@ -86,30 +63,14 @@ function update() {
             var bullet = bullets.getFirstDead();
             var bulletTarget = {};
             bullet.reset(players[sessionID].x + 10, players[sessionID].y + 20);
-            if (pad1.connected) {
+            if (rightStickX1 || rightStickY1) {
                 var angleToShoot = Math.atan2(rightStickY1, rightStickX1);
                 bullet.body.velocity.x = (Math.cos(angleToShoot) * 700);
                 bullet.body.velocity.y = (Math.sin(angleToShoot) * 700);
             }
-            if (pad2.connected) {
-                var angleToShoot = Math.atan2(rightStickY2, rightStickX2);
-                bullet.body.velocity.x = (Math.cos(angleToShoot) * 700);
-                bullet.body.velocity.y = (Math.sin(angleToShoot) * 700);
-            }
-            if (pad3.connected) {
-                var angleToShoot = Math.atan2(rightStickY3, rightStickX3);
-                bullet.body.velocity.x = (Math.cos(angleToShoot) * 700);
-                bullet.body.velocity.y = (Math.sin(angleToShoot) * 700);
-            }
-            if (pad4.connected) {
-                var angleToShoot = Math.atan2(rightStickY4, rightStickX4);
-                bullet.body.velocity.x = (Math.cos(angleToShoot) * 700);
-                bullet.body.velocity.y = (Math.sin(angleToShoot) * 700);
-            }
-            else {
+            else () {
                 game.physics.arcade.moveToPointer(bullet, 700);
             }
-            game.physics.arcade.moveToPointer(bullet, 700);
             bulletTarget = {
                 x: game.input.mousePointer.x,
                 y: game.input.mousePointer.y,
