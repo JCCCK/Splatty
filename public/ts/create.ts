@@ -4,6 +4,8 @@ var layer;
 var mainTileLayer;
 var splatterTileLayer;
 
+var splatterKeeper = [];
+
 //players
 var players = []; //array of all players in session
 var playerSprites = []; //array of all player sprite
@@ -80,11 +82,8 @@ function create(){
 
     splatterTileLayer = map.createBlankLayer('Tile Layer 2', 64, 64, 16, 16);
 
-
     //Un-comment this on to see the collision tiles
     //layer.debug = true;
-
-
 
     //shooting
     bullets = game.add.group();
@@ -166,6 +165,5 @@ function create(){
         console.log("newPlayerAdded")
         addPlayer(data);
     });
-
 
 }

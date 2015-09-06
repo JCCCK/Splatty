@@ -5,7 +5,12 @@ function update() {
     game.physics.arcade.collide(bullets, mainTileLayer, function (bullet, mainTileLayer) {
         bullet.kill();
         var changeFactor = ((bullet.playerID % 4) + 1) * 100;
-        map.putTile(mainTileLayer.index + changeFactor, mainTileLayer.x, mainTileLayer.y, splatterTileLayer);
+        var newKey = mainTileLayer.index + changeFactor;
+        map.putTile(newKey, mainTileLayer.x, mainTileLayer.y, splatterTileLayer);
+        if (!splatterKeeper[mainTileLayer.x]) {
+            splatterKeeper[mainTileLayer.x] = [];
+        }
+        splatterKeeper[mainTileLayer.x][mainTileLayer.y] = newKey;
     });
     if (!(players[sessionID] === undefined)) {
         players[sessionID].body.velocity.x = 0;

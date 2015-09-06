@@ -1,14 +1,28 @@
 function update() {
-  var rightStickX1 = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
-  var rightStickY1 = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
+    //gamepad
+    var rightStickX1 = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
+    var rightStickY1 = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
+
+    //collisions
     game.physics.arcade.collide(players, mainTileLayer);
+
     game.physics.arcade.collide(bullets, mainTileLayer, function (bullet, mainTileLayer) {
+        //bullet collided, destroy it
         bullet.kill();
 
+        //figure out what color to change the wall to
         var changeFactor = ((bullet.playerID % 4)+1) * 100;
-        map.putTile(mainTileLayer.index + changeFactor, mainTileLayer.x, mainTileLayer.y, splatterTileLayer);
+        var newKey = mainTileLayer.index + changeFactor;
+        //splatter the point
+        map.putTile(newKey, mainTileLayer.x, mainTileLayer.y, splatterTileLayer);
 
+        //save the splatter
+        if (!splatterKeeper[mainTileLayer.x]) {
+            splatterKeeper[mainTileLayer.x] = [];
+        }
+        splatterKeeper[mainTileLayer.x][mainTileLayer.y] = newKey;
     });
+
     if (!(players[sessionID] === undefined)) {
         players[sessionID].body.velocity.x = 0;
         game.physics.arcade.collide(players[sessionID], mainTileLayer);

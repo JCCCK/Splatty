@@ -2,6 +2,7 @@ var map;
 var layer;
 var mainTileLayer;
 var splatterTileLayer;
+var splatterKeeper = [];
 var players = [];
 var playerSprites = [];
 var PLAYER_MAX = 16;
