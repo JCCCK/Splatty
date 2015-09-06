@@ -11,53 +11,58 @@ socket.on('count', function (data) {
     UiPlayers.innerHTML = 'Players: ' + data['playerCount'];
 });
 function preload() {
+    game.load.image('background', '/resources/background2.png');
     game.load.tilemap('level1', '/resources/level1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles-1', '/resources/tiles-1.png');
-    game.load.spritesheet('dude0', '/resources/dude.png', 32, 48);
-    game.load.spritesheet('dude1', '/resources/dude2.png', 32, 48);
-    game.load.spritesheet('dude2', '/resources/dude3.png', 32, 48);
-    game.load.spritesheet('dude3', '/resources/dude4.png', 32, 48);
-    game.load.spritesheet('droid', '/resources/droid.png', 32, 32);
-    game.load.image('starSmall', '/resources/star.png');
-    game.load.image('starBig', '/resources/star2.png');
-    game.load.image('background', '/resources/background2.png');
-    game.load.image('bullet', '/resources/purple_ball.png');
+    game.load.spritesheet('dude0', '/resources/dark_blue_dude.png', 32, 48);
+    game.load.spritesheet('dude1', '/resources/green_dude.png', 32, 48);
+    game.load.spritesheet('dude2', '/resources/light_blue_dude.png', 32, 48);
+    game.load.spritesheet('dude3', '/resources/purple_dude.png', 32, 48);
+    game.load.image('dark_blue_bullet', '/resources/dark_blue_bullet.png');
+    game.load.image('green_bullet', '/resources/green_bullet.png');
+    game.load.image('light_blue_bullet', '/resources/light_blue_bullet.png');
+    game.load.image('purple_bullet', '/resources/purple_bullet.png');
 }
 var map;
 var tileset;
 var layer;
+var mainTileLayer;
+var splatterTileLayer;
 var players = [];
 var playerSprites = [];
 var PLAYER_MAX = 4;
-var mainTileLayer;
-var splatterTileLayer;
 var facing = 'left';
 var jumpTimer = 0;
 var background;
+var bullets;
+var fireRate = 200;
+var nextFire = 0;
 var cursors;
 var spacebar;
 var aKey;
 var wKey;
 var sKey;
 var dKey;
-var bullets;
-var fireRate = 200;
-var nextFire = 0;
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
+    game.physics.arcade.gravity.y = 500;
     game.stage.backgroundColor = '#000000';
     background = game.add.tileSprite(0, 0, 800, 600, 'background');
     background.fixedToCamera = true;
+    cursors = game.input.keyboard.createCursorKeys();
+    spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
+    wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
+    dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
     map = game.add.tilemap('level1');
     map.addTilesetImage('tiles-1');
     map.setCollisionByExclusion([13, 14, 15, 16, 46, 47, 48, 49, 50, 51]);
     mainTileLayer = map.createLayer('Tile Layer 1');
     mainTileLayer.resizeWorld();
-    game.physics.arcade.gravity.y = 500;
     bullets = game.add.group();
     bullets.enableBody = true;
     bullets.physicsBodyType = Phaser.Physics.ARCADE;
-    bullets.createMultiple(50, 'bullet');
+    bullets.createMultiple(50, 'dark_blue_bullet');
     bullets.setAll('checkWorldBounds', true);
     bullets.setAll('outOfBoundsKill', true);
     for (var i = 0; i < PLAYER_MAX; i++) {
@@ -92,11 +97,6 @@ function create() {
         players[sessionID].y = 32;
         game.camera.follow(players[sessionID]);
     }
-    cursors = game.input.keyboard.createCursorKeys();
-    spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
-    wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
-    dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
     socket.on('initialize', function (data) {
         console.log(data);
         sessionID = data.id;
@@ -116,8 +116,7 @@ function create() {
     });
 }
 function update() {
-    game.physics.arcade.collide(players, layer);
-    game.physics.arcade.collide(bullets, layer);
+    game.physics.arcade.collide(players, mainTileLayer);
     game.physics.arcade.collide(bullets, mainTileLayer, function (bullet, mainTileLayer) {
         bullet.kill();
     });
@@ -159,16 +158,16 @@ function update() {
     socket.on('updatedImpulse', function (data) {
         var i = data.sessionID;
     });
+    function fire() {
+        if (game.time.now > nextFire && bullets.countDead() > 0 && (!(players[sessionID] === undefined))) {
+            nextFire = game.time.now + fireRate;
+            var bullet = bullets.getFirstDead();
+            bullet.reset(players[sessionID].x + 10, players[sessionID].y + 20);
+            game.physics.arcade.moveToPointer(bullet, 700);
+        }
+    }
     if (game.input.activePointer.isDown) {
         fire();
-    }
-}
-function fire() {
-    if (game.time.now > nextFire && bullets.countDead() > 0 && (!(players[sessionID] === undefined))) {
-        nextFire = game.time.now + fireRate;
-        var bullet = bullets.getFirstDead();
-        bullet.reset(players[sessionID].x + 10, players[sessionID].y + 20);
-        game.physics.arcade.moveToPointer(bullet, 700);
     }
 }
 function render() {
