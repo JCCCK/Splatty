@@ -108,9 +108,9 @@ function create(){
 
     //players
     for(var i = 0; i < PLAYER_MAX; i++){
-        var spritePath = i % 4;
-            console.log(spritePath);
-            spritePath = 'dude' + spritePath;
+        var spriteNumber = i % 4;
+            console.log(spriteNumber);
+            var spritePath = 'dude' + spriteNumber;
             console.log(spritePath);
         playerSprites[i] = game.make.sprite(32, 32, spritePath);
     }
@@ -146,7 +146,7 @@ function create(){
     socket.on('initialize', function(data){
         console.log(data);
         sessionID = data.id;
-        for (i in data.p_list){
+        for (var i in data.p_list){
             if (data.p_list[i]){
                 addPlayer(i);
             }
