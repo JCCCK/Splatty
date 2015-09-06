@@ -77,9 +77,9 @@ function update() {
                 bullet.body.velocity.y = (Math.sin(angleToShoot) * 700);
             }
             else{
-                game.physics.arcade.moveToPointer(bullet, 700);
                 xScore = game.input.mousePointer.x;
                 yScore = game.input.mousePointer.y;
+                game.physics.arcade.moveToXY(bullet, xScore, yScore, 700);
             }
             bullet.playerID = sessionID;
             bulletTarget = {

@@ -1,5 +1,4 @@
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update, render: render });
-// var socket = io.connect('https://secret-temple-3770.herokuapp.com/');
 var socket = io.connect('localhost:5000');
 var sessionID = 0;
 socket.on('connect', function (data) {

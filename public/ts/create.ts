@@ -115,14 +115,13 @@ function create(){
             console.log("init!")
             players[p_id] = game.add.existing(playerSprites[p_id]);
             game.physics.enable(players[p_id], Phaser.Physics.ARCADE);
+            players[p_id].x = data.position.x;
+            players[p_id].y = data.position.y - 5;
             players[p_id].body.collideWorldBounds = true;
             players[p_id].body.setSize(20, 32, 5, 16);
             players[p_id].animations.add('left', [0, 1, 2, 3], 10, true);
             players[p_id].animations.add('turn', [4], 20, true);
             players[p_id].animations.add('right', [5, 6, 7, 8], 10, true);
-            players[p_id].x = data.position.x;
-            players[p_id].y = data.position.y + 50;
-            //spawn in offscreen, then wait for positional update
         }
     }
 
