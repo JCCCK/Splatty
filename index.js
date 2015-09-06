@@ -75,7 +75,7 @@ io.on('connection', function (socket) {
         for(i in impulseQueue){
             k = impulseQueue[i];
             console.log(k);
-            playerPositions[k.playerID] = k.position
+            playerPositions[k.playerID] = k.position;
             io.emit('updatedImpulse', k);
             impulseQueue.shift();
         }

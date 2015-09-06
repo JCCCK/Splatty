@@ -163,6 +163,7 @@ function create(){
 
 function update(){
     game.physics.arcade.collide(players, layer);
+    game.physics.arcade.collide(players, mainTileLayer);
     game.physics.arcade.collide(bullets, layer);
     game.physics.arcade.collide(bullets, mainTileLayer, function(bullet, mainTileLayer) {
         bullet.kill();
@@ -223,6 +224,10 @@ function update(){
     //grab new players
 
     socket.on('updatedImpulse', function(data){
+        players[data.playerID].body.velocity.y = data.impulse.y;
+        players[data.playerID].body.velocity.x = data.impulse.x;
+        players[data.playerID].body.position.y = data.position.y;
+        players[data.playerID].body.position.x = data.position.x;
     });
 
     if (game.input.activePointer.isDown) {
