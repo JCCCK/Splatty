@@ -33,7 +33,7 @@ function update() {
                 facing = 'idle';
             }
         }
-        if ((spacebar.isDown || cursors.up.isDown || wKey.isDown || (pad1.justPressed(Phaser.Gamepad.XBOX360_A))) && players[sessionID].body.onFloor() && game.time.now > jumpTimer) {
+        if ((spacebar.isDown || cursors.up.isDown || wKey.isDown || pad1.justPressed(Phaser.Gamepad.XBOX360_A) || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_UP)) && players[sessionID].body.onFloor() && game.time.now > jumpTimer) {
             players[sessionID].body.velocity.y = -300;
             jump_up.play();
             jumpTimer = game.time.now + 750;
