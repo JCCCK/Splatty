@@ -19,7 +19,6 @@ var wKey;
 var sKey;
 var dKey;
 var pad1;
-var indicator;
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.physics.arcade.gravity.y = 500;
