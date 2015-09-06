@@ -121,9 +121,4 @@ function create() {
         console.log("newPlayerAdded");
         addPlayer(data);
     });
-    socket.on('jettison', function (data) {
-        console.log(data);
-        console.log("jettisoned!");
-        players[data].kill();
-    });
 }
