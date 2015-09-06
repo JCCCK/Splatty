@@ -5,7 +5,7 @@ var mainTileLayer;
 var splatterTileLayer;
 var players = [];
 var playerSprites = [];
-var PLAYER_MAX = 4;
+var PLAYER_MAX = 16;
 var facing = 'left';
 var jumpTimer = 0;
 var background;
@@ -47,9 +47,12 @@ function create() {
         console.log(spritePath);
         playerSprites[i] = game.make.sprite(32, 32, spritePath);
     }
-    function addPlayer(p_id) {
+    function addPlayer(data) {
+        console.log(data);
+        var p_id = data.playerID;
         console.log(p_id);
         if (sessionID != p_id) {
+            console.log("init!");
             players[p_id] = game.add.existing(playerSprites[p_id]);
             game.physics.enable(players[p_id], Phaser.Physics.ARCADE);
             players[p_id].body.collideWorldBounds = true;
@@ -57,6 +60,8 @@ function create() {
             players[p_id].animations.add('left', [0, 1, 2, 3], 10, true);
             players[p_id].animations.add('turn', [4], 20, true);
             players[p_id].animations.add('right', [5, 6, 7, 8], 10, true);
+            players[p_id].x = data.position.x;
+            players[p_id].y = data.position.y;
         }
     }
     function initializeSelf() {
@@ -74,19 +79,27 @@ function create() {
     }
     socket.on('initialize', function (data) {
         console.log(data);
-        sessionID = data.id;
+        sessionID = data.playerID;
+        console.log("sessionid = " + sessionID);
         for (var i in data.p_list) {
             if (data.p_list[i]) {
-                addPlayer(i);
+                var initPlayerData = {
+                    position: data.posList[i],
+                    playerID: i
+                };
+                addPlayer(initPlayerData);
             }
         }
         initializeSelf();
-        socket.emit('newPlayer', sessionID);
+        var initPackage = {
+            playerID: sessionID,
+            position: players[sessionID].body.position
+        };
+        socket.emit('newPlayer', initPackage);
         console.log("initialized");
     });
     socket.on('newPlayerwithPos', function (data) {
         console.log("newPlayerAdded");
-        var obj = data;
         addPlayer(data);
     });
 }

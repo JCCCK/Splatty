@@ -31,15 +31,18 @@ function update() {
         if (game.input.activePointer.isDown) {
             fire();
         }
-        var impulse = players[sessionID].body.velocity;
         var vector = {
-            sessionID: sessionID,
-            impulse: players[sessionID].body.velocity
+            playerID: sessionID,
+            impulse: players[sessionID].body.velocity,
+            position: players[sessionID].body.position
         };
         socket.emit('playerImpulse', vector);
     }
     socket.on('updatedImpulse', function (data) {
-        var i = data.sessionID;
+        players[data.playerID].body.velocity.y = data.impulse.y;
+        players[data.playerID].body.velocity.x = data.impulse.x;
+        players[data.playerID].body.position.y = data.position.y;
+        players[data.playerID].body.position.x = data.position.x;
     });
     function fire() {
         if (game.time.now > nextFire && bullets.countDead() > 0 && (!(players[sessionID] === undefined))) {

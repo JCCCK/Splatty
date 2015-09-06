@@ -7,7 +7,7 @@ var express = require('express'),
     server = require('http').Server(app),
     io = require('socket.io')(server);
 
-var playerCount = 1;
+var playerCount = 0;
 var playerList = [];
 var playerPositions = [];
 var impulseQueue = [];
@@ -33,22 +33,17 @@ server.listen(app.get('port'), function() {
 
 function addNewPlayer(){
     console.log(playerList);
-    if(playerList.length == 0){
-        playerList[0] = true;
-        return 0;
-    } else{
-        for(var i = 0; i < playerList.length; i++){
-
-            if(playerList[i] == false){
-                console.log(i);
-                playerList[i] = true;
-                playerPositions[i] = {x: 32, y:32}
-                console.log(playerList[i])
-                return i;
-            }
+    for(var i = 0; i < playerList.length; i++){
+        if(playerList[i] == false){
+            console.log(i);
+            playerList[i] = true;
+            playerPositions[i] = {x: 32, y:32}
+            console.log(playerList[i])
+            return i;
         }
     }
 }
+
 
 io.on('connection', function (socket) {
   var id = addNewPlayer();
