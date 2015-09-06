@@ -61,6 +61,7 @@ function create() {
         console.log(spritePath);
         playerSprites[i] = game.make.sprite(32, 32, spritePath);
     }
+    game.physics.arcade.collide(players, mainTileLayer);
     function addPlayer(data) {
         console.log(data);
         var p_id = data.playerID;

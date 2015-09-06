@@ -50,7 +50,7 @@ function create(){
     pad2 = game.input.gamepad.pad2;
     pad3 = game.input.gamepad.pad3;
     pad4 = game.input.gamepad.pad4;
-    
+
     //init buttons
     cursors = game.input.keyboard.createCursorKeys();
     spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -95,7 +95,7 @@ function create(){
             console.log(spritePath);
         playerSprites[i] = game.make.sprite(32, 32, spritePath);
     }
-
+    game.physics.arcade.collide(players, mainTileLayer);
 
 
     function addPlayer(data){
