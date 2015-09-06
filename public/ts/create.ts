@@ -54,6 +54,8 @@ function create(){
     //Un-comment this on to see the collision tiles
     //layer.debug = true;
 
+
+
     //shooting
     bullets = game.add.group();
     bullets.enableBody = true;
@@ -71,6 +73,8 @@ function create(){
             console.log(spritePath);
         playerSprites[i] = game.make.sprite(32, 32, spritePath);
     }
+
+    
 
     function addPlayer(data){
         console.log(data);

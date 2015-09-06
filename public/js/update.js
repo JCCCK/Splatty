@@ -44,12 +44,26 @@ function update() {
         players[data.playerID].body.position.y = data.position.y;
         players[data.playerID].body.position.x = data.position.x;
     });
+    socket.on('firedProjectile', function (data) {
+        if (data.playerID != sessionID) {
+            var bullet = bullets.getFirstDead();
+            bullet.reset(players[data.playerID].x + 10, players[data.playerID].y + 20);
+            game.physics.arcade.moveToXY(bullet, data.x, data.y, 700);
+        }
+    });
     function fire() {
         if (game.time.now > nextFire && bullets.countDead() > 0 && (!(players[sessionID] === undefined))) {
             nextFire = game.time.now + fireRate;
             var bullet = bullets.getFirstDead();
+            var bulletTarget = {};
             bullet.reset(players[sessionID].x + 10, players[sessionID].y + 20);
             game.physics.arcade.moveToPointer(bullet, 700);
+            bulletTarget = {
+                x: game.input.mousePointer.x,
+                y: game.input.mousePointer.y,
+                playerID: sessionID
+            };
+            socket.emit('bulletImpulse', bulletTarget);
         }
     }
     if (game.input.activePointer.isDown) {
