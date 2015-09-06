@@ -32,6 +32,7 @@ function update() {
         }
         if ((spacebar.isDown || cursors.up.isDown || wKey.isDown || (pad1.justPressed(Phaser.Gamepad.XBOX360_A))) && players[sessionID].body.onFloor() && game.time.now > jumpTimer) {
             players[sessionID].body.velocity.y = -300;
+            jump_up.play();
             jumpTimer = game.time.now + 750;
         }
         if (rightStickX1 || rightStickY1) {
