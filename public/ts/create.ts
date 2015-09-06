@@ -34,6 +34,10 @@ var pad3;
 var pad4;
 var indicator;
 
+//sounds
+var jump_up;
+var jump_land;
+
 function create(){
     //init physics
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -50,7 +54,11 @@ function create(){
     pad2 = game.input.gamepad.pad2;
     pad3 = game.input.gamepad.pad3;
     pad4 = game.input.gamepad.pad4;
-    
+
+    //sounds
+    jump_up = game.add.audio('jump_up');
+    jump_land = game.add.audio('jump_land');
+
     //init buttons
     cursors = game.input.keyboard.createCursorKeys();
     spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
