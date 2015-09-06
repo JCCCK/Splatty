@@ -68,6 +68,7 @@ function create() {
     function addPlayer(data) {
         console.log(data);
         var p_id = data.playerID;
+        game.physics.arcade.collide(players, mainTileLayer);
         console.log(p_id);
         if (sessionID != p_id) {
             console.log("init!");
@@ -119,5 +120,9 @@ function create() {
     socket.on('newPlayerwithPos', function (data) {
         console.log("newPlayerAdded");
         addPlayer(data);
+    });
+    socket.on('jettison', function (data) {
+        console.log(data);
+        players[data].kill();
     });
 }

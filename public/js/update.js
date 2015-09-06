@@ -4,12 +4,8 @@ function update() {
     game.physics.arcade.collide(players, mainTileLayer);
     game.physics.arcade.collide(bullets, mainTileLayer, function (bullet, mainTileLayer) {
         bullet.kill();
-<<<<<<< HEAD
-        map.putTile(mainTileLayer.index + 400, mainTileLayer.x, mainTileLayer.y, splatterTileLayer);
-=======
         var changeFactor = ((bullet.playerID % 4) + 1) * 100;
         map.putTile(mainTileLayer.index + changeFactor, mainTileLayer.x, mainTileLayer.y, splatterTileLayer);
->>>>>>> origin/master
     });
     if (!(players[sessionID] === undefined)) {
         players[sessionID].body.velocity.x = 0;
