@@ -37,7 +37,6 @@ function addNewPlayer(){
         if(playerList[i] == false){
             playerList[i] = true;
             playerPositions[i] = {x: 32, y:32}
-            console.log(playerList[i])
             return i;
         }
     }
@@ -68,7 +67,6 @@ io.on('connection', function (socket) {
         }
     });
     socket.on('bulletImpulse', function(data){
-        console.log("bullet!");
         bulletQueue.push(data);
         for(i in bulletQueue){
             k = bulletQueue[i];
