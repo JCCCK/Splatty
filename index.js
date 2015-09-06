@@ -65,7 +65,6 @@ io.on('connection', function (socket) {
     socket.on('bulletImpulse', function(data){
             k = data;
             io.emit('firedProjectile', k); 
-        }
     })
   }, 1500);
 
