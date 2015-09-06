@@ -28,6 +28,13 @@ var wKey;
 var sKey;
 var dKey;
 
+//gamepad
+var pad1;
+var pad2;
+var pad3;
+var pad4;
+var indicator;
+
 function create(){
     //init physics
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -38,6 +45,13 @@ function create(){
     background = game.add.tileSprite(0, 0, 800, 600, 'background');
     background.fixedToCamera = true;
 
+    //gamepad
+    game.input.gamepad.start();
+    pad1 = game.input.gamepad.pad1;
+    pad2 = game.input.gamepad.pad2;
+    pad3 = game.input.gamepad.pad3;
+    pad4 = game.input.gamepad.pad4;
+    
     //init buttons
     cursors = game.input.keyboard.createCursorKeys();
     spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -78,7 +92,7 @@ function create(){
         playerSprites[i] = game.make.sprite(32, 32, spritePath);
     }
 
-    
+
 
     function addPlayer(data){
         console.log(data);
