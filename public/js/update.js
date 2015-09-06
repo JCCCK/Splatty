@@ -28,6 +28,13 @@ function update() {
             players[sessionID].body.velocity.y = -300;
             jumpTimer = game.time.now + 750;
         }
+        var rightStickX = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
+        var rightStickY = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
+        if (pad1.connected) {
+            if (rightStickX || rightStickY) {
+                fire();
+            }
+        }
         if (game.input.activePointer.isDown) {
             fire();
         }
@@ -49,7 +56,14 @@ function update() {
             nextFire = game.time.now + fireRate;
             var bullet = bullets.getFirstDead();
             bullet.reset(players[sessionID].x + 10, players[sessionID].y + 20);
-            game.physics.arcade.moveToPointer(bullet, 700);
+            if (pad1.connected) {
+                var angleToShoot = Math.atan2(rightStickY, rightStickX);
+                bullet.body.velocity.x = (Math.cos(angleToShoot) * 700);
+                bullet.body.velocity.y = (Math.sin(angleToShoot) * 700);
+            }
+            else {
+                game.physics.arcade.moveToPointer(bullet, 700);
+            }
         }
     }
     if (game.input.activePointer.isDown) {

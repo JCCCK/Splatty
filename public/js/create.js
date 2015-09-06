@@ -18,12 +18,16 @@ var aKey;
 var wKey;
 var sKey;
 var dKey;
+var pad1;
+var indicator;
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.physics.arcade.gravity.y = 500;
     game.stage.backgroundColor = '#000000';
     background = game.add.tileSprite(0, 0, 800, 600, 'background');
     background.fixedToCamera = true;
+    game.input.gamepad.start();
+    pad1 = game.input.gamepad.pad1;
     cursors = game.input.keyboard.createCursorKeys();
     spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
