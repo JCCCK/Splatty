@@ -4,7 +4,6 @@ var sessionID = 0;
 socket.on('connect', function (data) {
     console.log(data);
     sessionID = data;
-    sessionID = data;
     console.log(sessionID);
 });
 var UiPlayers = document.getElementById("players");
@@ -32,9 +31,11 @@ var layer;
 var players = []; //array of all players in session
 var playerSprites = []; //array of all player sprite
 var PLAYER_MAX = 4; //max number of players that can be in the game
+var mainTileLayer;
+var splatterTileLayer;
 var facing = 'left';
 var jumpTimer = 0;
-var bg;
+var background;
 
 //keys
 var cursors;
@@ -55,8 +56,8 @@ function create() {
 
     game.stage.backgroundColor = '#000000';
 
-    bg = game.add.tileSprite(0, 0, 800, 600, 'background');
-    bg.fixedToCamera = true;
+    background = game.add.tileSprite(0, 0, 800, 600, 'background');
+    background.fixedToCamera = true;
 
     map = game.add.tilemap('level1');
 
@@ -64,12 +65,12 @@ function create() {
 
     map.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
 
-    layer = map.createLayer('Tile Layer 1');
+    mainTileLayer = map.createLayer('Tile Layer 1');
 
     //  Un-comment this on to see the collision tiles
     // layer.debug = true;
 
-    layer.resizeWorld();
+    mainTileLayer.resizeWorld();
 
     game.physics.arcade.gravity.y = 500;
 
@@ -124,6 +125,7 @@ function create() {
     wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
+
     socket.on('initialize', function(data){
         console.log(data);
         sessionID = data.id;
@@ -142,18 +144,20 @@ function create() {
         var obj = data;
         addPlayer(data);
     });
+
 }
 
 function update(){
-
     game.physics.arcade.collide(players, layer);
     game.physics.arcade.collide(bullets, layer, function(bullet, layer) {
+
+    game.physics.arcade.collide(bullets, mainTileLayer, function(bullet, mainTileLayer) {
         bullet.kill();
     });
 
     if (!(players[sessionID] === undefined)){
             players[sessionID].body.velocity.x = 0;
-
+            game.physics.arcade.collide(players[sessionID], mainTileLayer);
         if (cursors.left.isDown || aKey.isDown) {
             players[sessionID].body.velocity.x = -150;
 
@@ -204,13 +208,13 @@ function update(){
 
     //grab new players
 
-
-
-
-
     socket.on('updatedImpulse', function(data){
         var i = data.sessionID;
     });
+
+    if (game.input.activePointer.isDown) {
+        fire();
+    }
 
 }
 
