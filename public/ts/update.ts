@@ -69,7 +69,7 @@ function update() {
                 bullet.body.velocity.x = (Math.cos(angleToShoot) * 700);
                 bullet.body.velocity.y = (Math.sin(angleToShoot) * 700);
             }
-            else () {
+            else{
                 game.physics.arcade.moveToPointer(bullet, 700);
             }
             bulletTarget = {
