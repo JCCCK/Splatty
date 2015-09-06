@@ -148,7 +148,7 @@ function update() {
     if (game.input.activePointer.isDown) {
         fire();
     }
-    gun.rotation = game.physics.arcade.angleToPointer(gun);
+    gun.rotation = game.physics.arcade.angleToPointer(player);
 }
 
 function fire() {
