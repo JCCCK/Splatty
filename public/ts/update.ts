@@ -71,15 +71,14 @@ function update() {
             bullet.reset(players[sessionID].x + 10, players[sessionID].y + 20);
             if (rightStickX1 || rightStickY1) {
                 var angleToShoot = Math.atan2(rightStickY1, rightStickX1);
-                xScore = rightStickX1;
-                yScore = rightStickY1;
+
                 bullet.body.velocity.x = (Math.cos(angleToShoot) * 700);
                 bullet.body.velocity.y = (Math.sin(angleToShoot) * 700);
             }
             else{
                 xScore = game.input.mousePointer.x;
                 yScore = game.input.mousePointer.y;
-                game.physics.arcade.moveToXY(bullet, xScore, yScore, 700);
+                game.physics.arcade.moveToPointer(bullet, xScore, yScore, 700);
             }
             bullet.playerID = sessionID;
             bulletTarget = {
