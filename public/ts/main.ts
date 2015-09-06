@@ -50,7 +50,7 @@ var bullets;
 var fireRate = 200;
 var nextFire = 0;
 
-function create() {
+function create(){
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -149,8 +149,7 @@ function create() {
 
 function update(){
     game.physics.arcade.collide(players, layer);
-    game.physics.arcade.collide(bullets, layer, function(bullet, layer) {
-
+    game.physics.arcade.collide(bullets, layer);
     game.physics.arcade.collide(bullets, mainTileLayer, function(bullet, mainTileLayer) {
         bullet.kill();
     });
@@ -219,7 +218,7 @@ function update(){
 }
 
 function fire() {
-    if (game.time.now > nextFire && bullets.countDead() > 0) {
+    if (game.time.now > nextFire && bullets.countDead() > 0 && (!(players[sessionID] === undefined))) {
         nextFire = game.time.now + fireRate;
         var bullet = bullets.getFirstDead();
         bullet.reset(players[sessionID].x + 10, players[sessionID].y + 20);
@@ -228,7 +227,7 @@ function fire() {
 
 }
 
-function render () {
+function render (){
     if  (players[sessionID] === undefined){
 
     } else {
