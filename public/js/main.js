@@ -1,5 +1,11 @@
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update, render: render });
-var socket = io.connect('http://localhost:5000');
+var socket = io.connect('localhost:5000');
+var sessionID = 0;
+socket.on('connect', function (data) {
+    console.log(data);
+    sessionID = data;
+    console.log(sessionID);
+});
 var UiPlayers = document.getElementById("players");
 socket.on('count', function (data) {
     UiPlayers.innerHTML = 'Players: ' + data['playerCount'];
@@ -7,7 +13,10 @@ socket.on('count', function (data) {
 function preload() {
     game.load.tilemap('level1', '/resources/level1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles-1', '/resources/tiles-1.png');
-    game.load.spritesheet('dude', '/resources/dude.png', 32, 48);
+    game.load.spritesheet('dude0', '/resources/dude.png', 32, 48);
+    game.load.spritesheet('dude1', '/resources/dude2.png', 32, 48);
+    game.load.spritesheet('dude2', '/resources/dude3.png', 32, 48);
+    game.load.spritesheet('dude3', '/resources/dude4.png', 32, 48);
     game.load.spritesheet('droid', '/resources/droid.png', 32, 32);
     game.load.image('starSmall', '/resources/star.png');
     game.load.image('starBig', '/resources/star2.png');
@@ -16,9 +25,12 @@ function preload() {
 }
 var map;
 var tileset;
+var layer;
+var players = [];
+var playerSprites = [];
+var PLAYER_MAX = 4;
 var mainTileLayer;
 var splatterTileLayer;
-var player;
 var facing = 'left';
 var jumpTimer = 0;
 var background;
@@ -48,71 +60,132 @@ function create() {
     bullets.createMultiple(50, 'bullet');
     bullets.setAll('checkWorldBounds', true);
     bullets.setAll('outOfBoundsKill', true);
-    player = game.add.sprite(32, 32, 'dude');
-    game.physics.enable(player, Phaser.Physics.ARCADE);
-    player.body.collideWorldBounds = true;
-    player.body.setSize(20, 32, 5, 16);
-    player.animations.add('left', [0, 1, 2, 3], 10, true);
-    player.animations.add('turn', [4], 20, true);
-    player.animations.add('right', [5, 6, 7, 8], 10, true);
-    game.camera.follow(player);
+    for (var i = 0; i < PLAYER_MAX; i++) {
+        var spritePath = i % 4;
+        console.log(spritePath);
+        spritePath = 'dude' + spritePath;
+        console.log(spritePath);
+        playerSprites[i] = game.make.sprite(32, 32, spritePath);
+    }
+    function addPlayer(p_id) {
+        console.log(p_id);
+        if (sessionID != p_id) {
+            players[p_id] = game.add.existing(playerSprites[p_id]);
+            game.physics.enable(players[p_id], Phaser.Physics.ARCADE);
+            players[p_id].body.collideWorldBounds = true;
+            players[p_id].body.setSize(20, 32, 5, 16);
+            players[p_id].animations.add('left', [0, 1, 2, 3], 10, true);
+            players[p_id].animations.add('turn', [4], 20, true);
+            players[p_id].animations.add('right', [5, 6, 7, 8], 10, true);
+        }
+    }
+    function initializeSelf() {
+        console.log(sessionID);
+        players[sessionID] = game.add.existing(playerSprites[sessionID]);
+        game.physics.enable(players[sessionID], Phaser.Physics.ARCADE);
+        players[sessionID].body.collideWorldBounds = true;
+        players[sessionID].body.setSize(20, 32, 5, 16);
+        players[sessionID].animations.add('left', [0, 1, 2, 3], 10, true);
+        players[sessionID].animations.add('turn', [4], 20, true);
+        players[sessionID].animations.add('right', [5, 6, 7, 8], 10, true);
+        players[sessionID].x = 32;
+        players[sessionID].y = 32;
+        game.camera.follow(players[sessionID]);
+    }
     cursors = game.input.keyboard.createCursorKeys();
     spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
+    socket.on('initialize', function (data) {
+        console.log(data);
+        sessionID = data.id;
+        for (i in data.p_list) {
+            if (data.p_list[i]) {
+                addPlayer(i);
+            }
+        }
+        initializeSelf();
+        socket.emit('newPlayer', sessionID);
+        console.log("initialized");
+    });
+    socket.on('newPlayerwithPos', function (data) {
+        console.log("newPlayerAdded");
+        var obj = data;
+        addPlayer(data);
+    });
 }
 function update() {
-    game.physics.arcade.collide(player, mainTileLayer);
+    game.physics.arcade.collide(players, layer);
+    game.physics.arcade.collide(bullets, layer);
     game.physics.arcade.collide(bullets, mainTileLayer, function (bullet, mainTileLayer) {
         bullet.kill();
     });
-    player.body.velocity.x = 0;
-    if (cursors.left.isDown || aKey.isDown) {
-        player.body.velocity.x = -150;
-    }
-    else if (cursors.right.isDown || dKey.isDown) {
-        player.body.velocity.x = 150;
-    }
-    else {
-        if (facing != 'idle') {
-            player.animations.stop();
-            if (facing == 'left') {
-                player.frame = 0;
-            }
-            else {
-                player.frame = 5;
-            }
-            facing = 'idle';
+    if (!(players[sessionID] === undefined)) {
+        players[sessionID].body.velocity.x = 0;
+        game.physics.arcade.collide(players[sessionID], mainTileLayer);
+        if (cursors.left.isDown || aKey.isDown) {
+            players[sessionID].body.velocity.x = -150;
         }
+        else if (cursors.right.isDown || dKey.isDown) {
+            players[sessionID].body.velocity.x = 150;
+        }
+        else {
+            if (facing != 'idle') {
+                players[sessionID].animations.stop();
+                if (facing == 'left') {
+                    players[sessionID].frame = 0;
+                }
+                else {
+                    players[sessionID].frame = 5;
+                }
+                facing = 'idle';
+            }
+        }
+        if ((spacebar.isDown || cursors.up.isDown || wKey.isDown) && players[sessionID].body.onFloor() && game.time.now > jumpTimer) {
+            players[sessionID].body.velocity.y = -300;
+            jumpTimer = game.time.now + 750;
+        }
+        if (game.input.activePointer.isDown) {
+            fire();
+        }
+        var impulse = players[sessionID].body.velocity;
+        var vector = {
+            sessionID: sessionID,
+            impulse: players[sessionID].body.velocity
+        };
+        socket.emit('playerImpulse', vector);
     }
-    if ((spacebar.isDown || cursors.up.isDown || wKey.isDown) && player.body.onFloor() && game.time.now > jumpTimer) {
-        player.body.velocity.y = -300;
-        jumpTimer = game.time.now + 750;
-    }
+    socket.on('updatedImpulse', function (data) {
+        var i = data.sessionID;
+    });
     if (game.input.activePointer.isDown) {
         fire();
     }
 }
 function fire() {
-    if (game.time.now > nextFire && bullets.countDead() > 0) {
+    if (game.time.now > nextFire && bullets.countDead() > 0 && (!(players[sessionID] === undefined))) {
         nextFire = game.time.now + fireRate;
         var bullet = bullets.getFirstDead();
-        bullet.reset(player.x + 10, player.y + 20);
+        bullet.reset(players[sessionID].x + 10, players[sessionID].y + 20);
         game.physics.arcade.moveToPointer(bullet, 700);
     }
 }
 function render() {
-    if (game.input.x < player.x - game.camera.x) {
-        if (facing != 'left' || facing != 'idle') {
-            player.animations.play('left');
-            facing = 'left';
-        }
+    if (players[sessionID] === undefined) {
     }
     else {
-        if (facing != 'right' || facing != 'idle') {
-            player.animations.play('right');
-            facing = 'right';
+        if (game.input.x < players[sessionID].x - game.camera.x) {
+            if (facing != 'left') {
+                players[sessionID].animations.play('left');
+                facing = 'left';
+            }
+        }
+        else {
+            if (facing != 'right') {
+                players[sessionID].animations.play('right');
+                facing = 'right';
+            }
         }
     }
 }
