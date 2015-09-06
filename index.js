@@ -63,11 +63,8 @@ io.on('connection', function (socket) {
             io.emit('updatedImpulse', k);
     });
     socket.on('bulletImpulse', function(data){
-        bulletQueue.push(data);
-        for(i in bulletQueue){
-            k = bulletQueue[i];
-            io.emit('firedProjectile', k);
-            bulletQueue.shift();
+            k = data;
+            io.emit('firedProjectile', k); 
         }
     })
   }, 1500);
