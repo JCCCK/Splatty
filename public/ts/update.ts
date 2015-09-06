@@ -27,10 +27,18 @@ function update() {
     if (!(players[sessionID] === undefined)) {
         players[sessionID].body.velocity.x = 0;
         game.physics.arcade.collide(players[sessionID], mainTileLayer);
-        if (cursors.left.isDown || aKey.isDown || (pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1)) {
+        if (cursors.left.isDown ||
+            aKey.isDown ||
+            (pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) ||
+            pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1)
+        ) {
             players[sessionID].body.velocity.x = -150;
         }
-        else if (cursors.right.isDown || dKey.isDown || (pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1)) {
+        else if (cursors.right.isDown ||
+            dKey.isDown ||
+            (pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) ||
+            pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1)
+        ) {
             players[sessionID].body.velocity.x = 150;
         }
         else {
@@ -45,7 +53,17 @@ function update() {
                 facing = 'idle';
             }
         }
-        if ((spacebar.isDown || cursors.up.isDown || wKey.isDown || pad1.justPressed(Phaser.Gamepad.XBOX360_A) || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_UP)) && players[sessionID].body.onFloor() && game.time.now > jumpTimer) {
+        if (
+            (
+                spacebar.isDown ||
+                cursors.up.isDown ||
+                wKey.isDown ||
+                pad1.justPressed(Phaser.Gamepad.XBOX360_A) ||
+                pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_UP)
+            ) &&
+            players[sessionID].body.onFloor() &&
+            game.time.now > jumpTimer
+        ) {
             players[sessionID].body.velocity.y = -300;
             jump_up.play();
             jumpTimer = game.time.now + 750;
