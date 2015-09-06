@@ -92,6 +92,7 @@ function create() {
     }
 
     function addPlayer(p_id){
+        console.log(p_id);
         if(sessionID != p_id){
             players[p_id] = game.add.existing(playerSprites[p_id]);
             game.physics.enable(players[p_id], Phaser.Physics.ARCADE);
@@ -127,7 +128,9 @@ function create() {
         console.log(data);
         sessionID = data.id;
         for (i in data.p_list){
-            addPlayer(data.p_list[i].p_id);
+            if (data.p_list[i]){
+                addPlayer(i);
+            }
         }
         initializeSelf();
         socket.emit('newPlayer', sessionID);

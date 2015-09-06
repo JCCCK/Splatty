@@ -10,7 +10,9 @@ var express = require('express'),
 var playerCount = 0;
 var playerList = [];
 var impulseQueue = [];
-var id = 0;
+for (var i = 0; i < 16; i++){
+    playerList.push(false);
+}
 
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
@@ -28,35 +30,37 @@ server.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
 
-
+function addNewPlayer(){
+    console.log(playerList);
+    if(playerList.length == 0){
+        console.log("noplayers!");
+        playerList[0] = true;
+        return 0;
+    } else{
+        for(var i = 0; i < playerList.length; i++){
+            console.log(i);
+            if(playerList[i] == false){
+                console.log(i);
+                playerList[i] = true;
+                console.log(playerList[i])
+                return i;
+            }
+        }
+    }
+}
 
 io.on('connection', function (socket) {
+  var id = addNewPlayer();
+  console.log(id);
   playerCount++;
-
   setTimeout(function () {
     socket.emit('connect', id);
     io.emit('count', { playerCount: playerCount });
 
-    if(playerList.length == 0){
-        id = 0;
-    } else{
-        for(var i = 0; i < playerList.length; i++){
-            console.log(i);
-            if(playerList[i] === undefined){
-                id = i;
-                break;
-            }
-        }
-    }
-
-    socket.emit('initialize', { id: id,
+    socket.emit('initialize', {id: id,
                                p_list: playerList});
-    socket.on('newPlayer', function(data){
-        console.log("newPlayer")
-        console.log(data);
-        socket.playerID = data;
-        playerList[data] = data;
 
+    socket.on('newPlayer', function(data){
         io.emit('newPlayerwithPos', data)
     });
     socket.on('playerImpulse', function(data){
@@ -74,6 +78,7 @@ io.on('connection', function (socket) {
 
   socket.on('disconnect', function(){
     playerCount--;
+    playerList.shift();
     io.emit('count', { playerCount: playerCount });
   });
 });
