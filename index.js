@@ -11,6 +11,7 @@ var playerCount = 0;
 var playerList = [];
 var playerPositions = [];
 var impulseQueue = [];
+var bulletQueue = [];
 for (var i = 0; i < 16; i++){
     playerList.push(false);
 }
@@ -32,10 +33,8 @@ server.listen(app.get('port'), function() {
 });
 
 function addNewPlayer(){
-    console.log(playerList);
     for(var i = 0; i < playerList.length; i++){
         if(playerList[i] == false){
-            console.log(i);
             playerList[i] = true;
             playerPositions[i] = {x: 32, y:32}
             console.log(playerList[i])
@@ -47,7 +46,6 @@ function addNewPlayer(){
 
 io.on('connection', function (socket) {
   var id = addNewPlayer();
-  console.log(id);
   playerCount++;
   setTimeout(function () {
     socket.emit('connect', id);
@@ -56,25 +54,28 @@ io.on('connection', function (socket) {
     socket.emit('initialize', {playerID: id,
                                p_list: playerList,
                                posList: playerPositions});
-
     socket.on('newPlayer', function(data){
-        console.log("data:");
-        console.log(data);
         socket.p_id = data.playerID;
         io.emit('newPlayerwithPos', data)
     });
     socket.on('playerImpulse', function(data){
-        console.log("pushingQueue!");
         impulseQueue.push(data);
-        console.log("clearingQueue!");
         for(i in impulseQueue){
             k = impulseQueue[i];
-            console.log(k);
             playerPositions[k.playerID] = k.position;
             io.emit('updatedImpulse', k);
             impulseQueue.shift();
         }
     });
+    socket.on('bulletImpulse', function(data){
+        console.log("bullet!");
+        bulletQueue.push(data);
+        for(i in bulletQueue){
+            k = bulletQueue[i];
+            io.emit('firedProjectile', k);
+            bulletQueue.shift();
+        }
+    })
   }, 1500);
 
   socket.on('disconnect', function(){
