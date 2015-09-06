@@ -80,7 +80,7 @@ function create() {
             players[p_id].animations.add('turn', [4], 20, true);
             players[p_id].animations.add('right', [5, 6, 7, 8], 10, true);
             players[p_id].x = data.position.x;
-            players[p_id].y = data.position.y;
+            players[p_id].y = data.position.y + 50;
         }
     }
     function initializeSelf() {
@@ -123,6 +123,7 @@ function create() {
     });
     socket.on('jettison', function (data) {
         console.log(data);
+        console.log("jettisoned!");
         players[data].kill();
     });
 }

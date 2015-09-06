@@ -55,6 +55,7 @@ io.on('connection', function (socket) {
                                posList: playerPositions});
     socket.on('newPlayer', function(data){
         socket.p_id = data.playerID;
+        console.log(socket.p_id);
         io.emit('newPlayerwithPos', data)
     });
     socket.on('playerImpulse', function(data){
@@ -75,6 +76,8 @@ io.on('connection', function (socket) {
   socket.on('disconnect', function(){
     playerCount--;
     playerList[socket.p_id] = false;
+    console.log(socket.p_id);
+    io.emit('jettison', socket.p_id);
     io.emit('count', { playerCount: playerCount });
   });
 });
