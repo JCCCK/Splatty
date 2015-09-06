@@ -11,17 +11,17 @@ socket.on('count', function (data) {
     UiPlayers.innerHTML = 'Players: ' + data['playerCount'];
 });
 function preload() {
-    game.load.image('background', '/resources/background2.png');
-    game.load.tilemap('level1', '/resources/level1.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.image('tiles-1', '/resources/tiles-1.png');
-    game.load.spritesheet('dude0', '/resources/dark_blue_dude.png', 32, 48);
-    game.load.spritesheet('dude1', '/resources/green_dude.png', 32, 48);
-    game.load.spritesheet('dude2', '/resources/light_blue_dude.png', 32, 48);
-    game.load.spritesheet('dude3', '/resources/purple_dude.png', 32, 48);
-    game.load.image('dark_blue_bullet', '/resources/dark_blue_bullet.png');
-    game.load.image('green_bullet', '/resources/green_bullet.png');
-    game.load.image('light_blue_bullet', '/resources/light_blue_bullet.png');
-    game.load.image('purple_bullet', '/resources/purple_bullet.png');
+    game.load.image('background', '/resources/background.png');
+    game.load.tilemap('level1', '/resources/level/map.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.image('tiles-1', '/resources/level/tiles-default.png');
+    game.load.spritesheet('dude0', '/resources/dudes/dark_blue_dude.png', 32, 48);
+    game.load.spritesheet('dude1', '/resources/dudes/green_dude.png', 32, 48);
+    game.load.spritesheet('dude2', '/resources/dudes/light_blue_dude.png', 32, 48);
+    game.load.spritesheet('dude3', '/resources/dudes/purple_dude.png', 32, 48);
+    game.load.image('bullet0', '/resources/bullets/dark_blue_bullet.png');
+    game.load.image('bullet1', '/resources/bullets/green_bullet.png');
+    game.load.image('bullet2', '/resources/bullets/light_blue_bullet.png');
+    game.load.image('bullet3', '/resources/bullets/purple_bullet.png');
 }
 var map;
 var tileset;
@@ -62,7 +62,7 @@ function create() {
     bullets = game.add.group();
     bullets.enableBody = true;
     bullets.physicsBodyType = Phaser.Physics.ARCADE;
-    bullets.createMultiple(50, 'dark_blue_bullet');
+    bullets.createMultiple(50, 'bullet0');
     bullets.setAll('checkWorldBounds', true);
     bullets.setAll('outOfBoundsKill', true);
     for (var i = 0; i < PLAYER_MAX; i++) {
