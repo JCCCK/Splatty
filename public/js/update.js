@@ -48,8 +48,6 @@ function update() {
     socket.on('updatedImpulse', function (data) {
         players[data.playerID].body.velocity.y = data.impulse.y;
         players[data.playerID].body.velocity.x = data.impulse.x;
-        players[data.playerID].body.position.y = data.position.y;
-        players[data.playerID].body.position.x = data.position.x;
     });
     socket.on('firedProjectile', function (data) {
         if (data.playerID != sessionID) {
