@@ -54,7 +54,7 @@ function create() {
     map.addTilesetImage('tiles-green');
     map.addTilesetImage('tiles-light-blue');
     map.addTilesetImage('tiles-purple');
-    splatterTileLayer = map.createBlankLayer('Tile Layer 2', 64, 64, 16, 16);
+    splatterTileLayer = map.createBlankLayer('Tile Layer 2', 120, 120, 16, 16);
     bullets = game.add.group();
     bullets.enableBody = true;
     bullets.physicsBodyType = Phaser.Physics.ARCADE;
