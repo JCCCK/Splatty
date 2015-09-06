@@ -13,15 +13,15 @@ function preload() {
     game.load.image('starBig', '/resources/star2.png');
     game.load.image('background', '/resources/background2.png');
     game.load.image('bullet', '/resources/purple_ball.png');
-    game.load.image('gun', '/resources/gun.png');
 }
 var map;
 var tileset;
-var layer;
+var mainTileLayer;
+var splatterTileLayer;
 var player;
 var facing = 'left';
 var jumpTimer = 0;
-var bg;
+var background;
 var cursors;
 var spacebar;
 var aKey;
@@ -31,17 +31,16 @@ var dKey;
 var bullets;
 var fireRate = 200;
 var nextFire = 0;
-var gun;
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.stage.backgroundColor = '#000000';
-    bg = game.add.tileSprite(0, 0, 800, 600, 'background');
-    bg.fixedToCamera = true;
+    background = game.add.tileSprite(0, 0, 800, 600, 'background');
+    background.fixedToCamera = true;
     map = game.add.tilemap('level1');
     map.addTilesetImage('tiles-1');
     map.setCollisionByExclusion([13, 14, 15, 16, 46, 47, 48, 49, 50, 51]);
-    layer = map.createLayer('Tile Layer 1');
-    layer.resizeWorld();
+    mainTileLayer = map.createLayer('Tile Layer 1');
+    mainTileLayer.resizeWorld();
     game.physics.arcade.gravity.y = 500;
     bullets = game.add.group();
     bullets.enableBody = true;
@@ -62,12 +61,10 @@ function create() {
     aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
-    gun = game.add.sprite(15, 45, 'gun');
-    player.addChild(gun);
 }
 function update() {
-    game.physics.arcade.collide(player, layer);
-    game.physics.arcade.collide(bullets, layer, function (bullet, layer) {
+    game.physics.arcade.collide(player, mainTileLayer);
+    game.physics.arcade.collide(bullets, mainTileLayer, function (bullet, mainTileLayer) {
         bullet.kill();
     });
     player.body.velocity.x = 0;
@@ -96,7 +93,6 @@ function update() {
     if (game.input.activePointer.isDown) {
         fire();
     }
-    gun.rotation = game.physics.arcade.angleToPointer(player);
 }
 function fire() {
     if (game.time.now > nextFire && bullets.countDead() > 0) {
@@ -108,13 +104,13 @@ function fire() {
 }
 function render() {
     if (game.input.x < player.x - game.camera.x) {
-        if (facing != 'left') {
+        if (facing != 'left' || facing != 'idle') {
             player.animations.play('left');
             facing = 'left';
         }
     }
     else {
-        if (facing != 'right') {
+        if (facing != 'right' || facing != 'idle') {
             player.animations.play('right');
             facing = 'right';
         }
