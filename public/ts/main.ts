@@ -2,6 +2,7 @@
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update, render: render });
 
 //session stuff
+
 var socket = io.connect('https://secret-temple-3770.herokuapp.com/');
 
 var sessionID = 0;
@@ -20,6 +21,9 @@ socket.on('count', function (data) {
 
 //preload
 function preload() {
+    //stop pausing game when you leave window
+    this.stage.disableVisibilityChange = true;
+
     //preload background
     game.load.image('background', '/resources/background.png');
 
@@ -44,5 +48,9 @@ function preload() {
     game.load.image('bullet1', '/resources/bullets/green_bullet.png');
     game.load.image('bullet2', '/resources/bullets/light_blue_bullet.png');
     game.load.image('bullet3', '/resources/bullets/purple_bullet.png');
+
+    //preload sounds
+    game.load.audio('jump_up', '/resources/sounds/jump_up.wav');
+    game.load.audio('jump_land', '/resources/sounds/jump_land.wav');
 
 }
