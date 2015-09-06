@@ -56,7 +56,8 @@ function update() {
             var bullet = bullets.getFirstDead();
             bullet.playerID = data.playerID;
             bullet.reset(players[data.playerID].x + 10, players[data.playerID].y + 20);
-            game.physics.arcade.moveToXY(bullet, data.x, data.y, 700);
+            bullet.body.velocity.x = data.x;
+            bullet.body.velocity.y = data.y;
         }
     });
     function fire() {
@@ -71,12 +72,14 @@ function update() {
                 bullet.body.velocity.y = (Math.sin(angleToShoot) * 700);
             }
             else{
-                game.physics.arcade.moveToPointer(bullet, 700);
+                var angleToShoot = game.physics.arcade.angleToPointer(players[sessionID]);
+                bullet.body.velocity.x = (Math.cos(angleToShoot) * 700);
+                bullet.body.velocity.y = (Math.sin(angleToShoot) * 700);
             }
             bullet.playerID = sessionID;
             bulletTarget = {
-                x: game.input.mousePointer.x,
-                y: game.input.mousePointer.y,
+                x:(Math.cos(game.physics.arcade.angleToPointer(players[sessionID])) * 700),
+                y: (Math.sin(game.physics.arcade.angleToPointer(players[sessionID])) * 700),
                 playerID: sessionID
             }
             socket.emit('bulletImpulse', bulletTarget);
