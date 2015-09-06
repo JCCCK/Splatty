@@ -96,7 +96,7 @@ function create() {
     wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
-    gun = game.add.sprite(15, 35, 'gun');
+    gun = game.add.sprite(15, 45, 'gun');
     player.addChild(gun);
 }
 
