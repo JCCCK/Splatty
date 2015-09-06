@@ -43,7 +43,7 @@ var dKey;
 var bullets;
 var fireRate = 200;
 var nextFire = 0;
-var gun
+var gun;
 
 function create() {
 
@@ -148,7 +148,7 @@ function update() {
     if (game.input.activePointer.isDown) {
         fire();
     }
-    gun.rotation = game.physics.arcade.angleToPointer(player);
+    gun.rotation = game.physics.arcade.angleToPointer(gun);
 }
 
 function fire() {

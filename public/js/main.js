@@ -96,7 +96,7 @@ function update() {
     if (game.input.activePointer.isDown) {
         fire();
     }
-    gun.rotation = game.physics.arcade.angleToPointer(player);
+    gun.rotation = game.physics.arcade.angleToPointer(gun);
 }
 function fire() {
     if (game.time.now > nextFire && bullets.countDead() > 0) {
