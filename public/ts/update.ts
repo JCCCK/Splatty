@@ -1,7 +1,11 @@
 function update() {
+  var rightStickX1 = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
+  var rightStickY1 = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
     game.physics.arcade.collide(players, mainTileLayer);
     game.physics.arcade.collide(bullets, mainTileLayer, function (bullet, mainTileLayer) {
         bullet.kill();
+        var changeFactor = ((sessionID % 4)+1) * 100;
+        map.putTile(mainTileLayer.index + changeFactor, mainTileLayer.x, mainTileLayer.y, splatterTileLayer);
     });
     if (!(players[sessionID] === undefined)) {
         players[sessionID].body.velocity.x = 0;
@@ -28,12 +32,8 @@ function update() {
             players[sessionID].body.velocity.y = -300;
             jumpTimer = game.time.now + 750;
         }
-        var rightStickX = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
-        var rightStickY = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
-        if (pad1.connected) {
-            if (rightStickX || rightStickY) {
-                fire();
-            }
+        if (rightStickX1 || rightStickY1) {
+          fire();
         }
         if (game.input.activePointer.isDown) {
             fire();
@@ -64,15 +64,14 @@ function update() {
             var bullet = bullets.getFirstDead();
             var bulletTarget = {};
             bullet.reset(players[sessionID].x + 10, players[sessionID].y + 20);
-            if (pad1.connected) {
-                var angleToShoot = Math.atan2(rightStickY, rightStickX);
+            if (rightStickX1 || rightStickY1) {
+                var angleToShoot = Math.atan2(rightStickY1, rightStickX1);
                 bullet.body.velocity.x = (Math.cos(angleToShoot) * 700);
                 bullet.body.velocity.y = (Math.sin(angleToShoot) * 700);
             }
-            else {
+            else{
                 game.physics.arcade.moveToPointer(bullet, 700);
             }
-            game.physics.arcade.moveToPointer(bullet, 700);
             bulletTarget = {
                 x: game.input.mousePointer.x,
                 y: game.input.mousePointer.y,

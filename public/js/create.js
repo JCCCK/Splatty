@@ -1,5 +1,4 @@
 var map;
-var tileset;
 var layer;
 var mainTileLayer;
 var splatterTileLayer;
@@ -19,6 +18,10 @@ var wKey;
 var sKey;
 var dKey;
 var pad1;
+var pad2;
+var pad3;
+var pad4;
+var indicator;
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.physics.arcade.gravity.y = 500;
@@ -27,6 +30,9 @@ function create() {
     background.fixedToCamera = true;
     game.input.gamepad.start();
     pad1 = game.input.gamepad.pad1;
+    pad2 = game.input.gamepad.pad2;
+    pad3 = game.input.gamepad.pad3;
+    pad4 = game.input.gamepad.pad4;
     cursors = game.input.keyboard.createCursorKeys();
     spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
@@ -37,6 +43,11 @@ function create() {
     map.setCollisionByExclusion([13, 14, 15, 16, 46, 47, 48, 49, 50, 51]);
     mainTileLayer = map.createLayer('Tile Layer 1');
     mainTileLayer.resizeWorld();
+    map.addTilesetImage('tiles-dark-blue');
+    map.addTilesetImage('tiles-green');
+    map.addTilesetImage('tiles-light-blue');
+    map.addTilesetImage('tiles-purple');
+    splatterTileLayer = map.createBlankLayer('Tile Layer 2', 64, 64, 16, 16);
     bullets = game.add.group();
     bullets.enableBody = true;
     bullets.physicsBodyType = Phaser.Physics.ARCADE;
@@ -50,6 +61,7 @@ function create() {
         console.log(spritePath);
         playerSprites[i] = game.make.sprite(32, 32, spritePath);
     }
+    game.physics.arcade.collide(players, mainTileLayer);
     function addPlayer(data) {
         console.log(data);
         var p_id = data.playerID;

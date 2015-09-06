@@ -1,6 +1,5 @@
 //game
 var map;
-var tileset;
 var layer;
 var mainTileLayer;
 var splatterTileLayer;
@@ -28,6 +27,13 @@ var wKey;
 var sKey;
 var dKey;
 
+//gamepad
+var pad1;
+var pad2;
+var pad3;
+var pad4;
+var indicator;
+
 function create(){
     //init physics
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -37,6 +43,13 @@ function create(){
     game.stage.backgroundColor = '#000000';
     background = game.add.tileSprite(0, 0, 800, 600, 'background');
     background.fixedToCamera = true;
+
+    //gamepad
+    game.input.gamepad.start();
+    pad1 = game.input.gamepad.pad1;
+    pad2 = game.input.gamepad.pad2;
+    pad3 = game.input.gamepad.pad3;
+    pad4 = game.input.gamepad.pad4;
 
     //init buttons
     cursors = game.input.keyboard.createCursorKeys();
@@ -50,10 +63,15 @@ function create(){
     map.addTilesetImage('tiles-default');
     map.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
     mainTileLayer = map.createLayer('Tile Layer 1');
-
     mainTileLayer.resizeWorld();
 
-    // splatterTileLayer = map.createLayer('Tile Layer 1');
+    map.addTilesetImage('tiles-dark-blue');
+    map.addTilesetImage('tiles-green');
+    map.addTilesetImage('tiles-light-blue');
+    map.addTilesetImage('tiles-purple');
+
+    splatterTileLayer = map.createBlankLayer('Tile Layer 2', 64, 64, 16, 16);
+
 
     //Un-comment this on to see the collision tiles
     //layer.debug = true;
@@ -77,8 +95,8 @@ function create(){
             console.log(spritePath);
         playerSprites[i] = game.make.sprite(32, 32, spritePath);
     }
+    game.physics.arcade.collide(players, mainTileLayer);
 
-    
 
     function addPlayer(data){
         console.log(data);
