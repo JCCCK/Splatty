@@ -20,6 +20,7 @@ socket.on('count', function (data) {
 
 //preload
 function preload() {
+    this.stage.disableVisibilityChange = true;
     //preload background
     game.load.image('background', '/resources/background.png');
 
