@@ -48,6 +48,9 @@ function preload() {
     game.load.image('bullet2', '/resources/bullets/light_blue_bullet.png');
     game.load.image('bullet3', '/resources/bullets/purple_bullet.png');
 
+    //preload controller icon
+    game.load.image('controllerconnected', '/resources/gun.png'); //gun.png placeholder
+
     //preload sounds
     game.load.audio('jump_up', '/resources/sounds/jump_up.wav');
     game.load.audio('jump_land', '/resources/sounds/jump_land.wav');

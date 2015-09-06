@@ -22,7 +22,7 @@ var pad1;
 var pad2;
 var pad3;
 var pad4;
-var indicator;
+var controllerconnected;
 var jump_up;
 var jump_land;
 var splash;

@@ -34,7 +34,7 @@ var pad1;
 var pad2;
 var pad3;
 var pad4;
-var indicator;
+var controllerconnected;
 
 //sounds
 var jump_up;
