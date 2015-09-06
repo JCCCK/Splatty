@@ -10,7 +10,8 @@
          "width":64,
          "x":0,
          "y":0
-        }],
+        }
+    ],
  "orientation":"orthogonal",
  "properties":
     {
@@ -20,11 +21,11 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"tiles-1.png",
+         "image":"tiles-default.png",
          "imageheight":64,
          "imagewidth":272,
          "margin":0,
-         "name":"tiles-1",
+         "name":"tiles-default",
          "properties":
             {
 

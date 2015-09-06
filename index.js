@@ -68,6 +68,7 @@ io.on('connection', function (socket) {
         }
     });
     socket.on('bulletImpulse', function(data){
+        console.log("bullet!");
         bulletQueue.push(data);
         for(i in bulletQueue){
             k = bulletQueue[i];
