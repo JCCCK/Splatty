@@ -32,11 +32,24 @@ server.listen(app.get('port'), function() {
 
 io.on('connection', function (socket) {
   playerCount++;
-  id++;
+
   setTimeout(function () {
     socket.emit('connect', id);
     io.emit('count', { playerCount: playerCount });
-    socket.emit('initialize', {id: id,
+
+    if(playerList.length == 0){
+        id = 0;
+    } else{
+        for(var i = 0; i < playerList.length; i++){
+            console.log(i);
+            if(playerList[i] === undefined){
+                id = i;
+                break;
+            }
+        }
+    }
+
+    socket.emit('initialize', { id: id,
                                p_list: playerList});
     socket.on('newPlayer', function(data){
         console.log("newPlayer")
@@ -53,7 +66,7 @@ io.on('connection', function (socket) {
         for(i in impulseQueue){
             k = impulseQueue[i];
             console.log(k);
-            io.emit('updatedImpulses', k);
+            io.emit('updatedImpulse', k);
             impulseQueue.shift();
         }
     });

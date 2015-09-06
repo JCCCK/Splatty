@@ -4,6 +4,7 @@ var sessionID = 0;
 socket.on('connect', function (data) {
     console.log(data);
     sessionID = data;
+    sessionID = data;
     console.log(sessionID);
 });
 var UiPlayers = document.getElementById("players");
@@ -26,8 +27,8 @@ function preload() {
 var map;
 var tileset;
 var layer;
-var userPlayer = 0;
 var players = [];
+var playerSprites = [];
 var PLAYER_MAX = 4;
 var facing = 'left';
 var jumpTimer = 0;
@@ -62,18 +63,32 @@ function create() {
         var spritePath = i % 4;
         console.log(spritePath);
         spritePath = 'dude' + spritePath;
-        players[i] = game.make.sprite(spritePath);
-        game.physics.enable(players[i], Phaser.Physics.ARCADE);
-        players[i].body.collideWorldBounds = true;
-        players[i].body.setSize(20, 32, 5, 16);
-        players[i].animations.add('left', [0, 1, 2, 3], 10, true);
-        players[i].animations.add('turn', [4], 20, true);
-        players[i].animations.add('right', [5, 6, 7, 8], 10, true);
+        console.log(spritePath);
+        playerSprites[i] = game.make.sprite(spritePath);
     }
-    players[userPlayer].x = 32;
-    players[userPlayer].y = 32;
-    game.camera.follow(players[userPlayer]);
     function addPlayer(p_id) {
+        if (sessionID != p_id) {
+            players[p_id] = game.add.existing(playerSprites[p_id]);
+            game.physics.enable(players[p_id], Phaser.Physics.ARCADE);
+            players[p_id].body.collideWorldBounds = true;
+            players[p_id].body.setSize(20, 32, 5, 16);
+            players[p_id].animations.add('left', [0, 1, 2, 3], 10, true);
+            players[p_id].animations.add('turn', [4], 20, true);
+            players[p_id].animations.add('right', [5, 6, 7, 8], 10, true);
+        }
+    }
+    function initializeSelf() {
+        console.log(sessionID);
+        players[sessionID] = game.add.existing(playerSprites[sessionID]);
+        game.physics.enable(players[sessionID], Phaser.Physics.ARCADE);
+        players[sessionID].body.collideWorldBounds = true;
+        players[sessionID].body.setSize(20, 32, 5, 16);
+        players[sessionID].animations.add('left', [0, 1, 2, 3], 10, true);
+        players[sessionID].animations.add('turn', [4], 20, true);
+        players[sessionID].animations.add('right', [5, 6, 7, 8], 10, true);
+        players[sessionID].x = 32;
+        players[sessionID].y = 32;
+        game.camera.follow(players[sessionID]);
     }
     cursors = game.input.keyboard.createCursorKeys();
     spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -86,6 +101,8 @@ function create() {
         for (i in data.p_list) {
             addPlayer(data.p_list[i].p_id);
         }
+        initializeSelf();
+        socket.emit('newPlayer', sessionID);
         console.log("initialized");
     });
     socket.on('newPlayerwithPos', function (data) {
@@ -99,58 +116,67 @@ function update() {
     game.physics.arcade.collide(bullets, layer, function (bullet, layer) {
         bullet.kill();
     });
-    players[userPlayer].body.velocity.x = 0;
-    if (cursors.left.isDown || aKey.isDown) {
-        players[userPlayer].body.velocity.x = -150;
-    }
-    else if (cursors.right.isDown || dKey.isDown) {
-        players[userPlayer].body.velocity.x = 150;
-    }
-    else {
-        if (facing != 'idle') {
-            players[userPlayer].animations.stop();
-            if (facing == 'left') {
-                players[userPlayer].frame = 0;
-            }
-            else {
-                players[userPlayer].frame = 5;
-            }
-            facing = 'idle';
+    if (!(players[sessionID] === undefined)) {
+        players[sessionID].body.velocity.x = 0;
+        if (cursors.left.isDown || aKey.isDown) {
+            players[sessionID].body.velocity.x = -150;
         }
+        else if (cursors.right.isDown || dKey.isDown) {
+            players[sessionID].body.velocity.x = 150;
+        }
+        else {
+            if (facing != 'idle') {
+                players[sessionID].animations.stop();
+                if (facing == 'left') {
+                    players[sessionID].frame = 0;
+                }
+                else {
+                    players[sessionID].frame = 5;
+                }
+                facing = 'idle';
+            }
+        }
+        if ((spacebar.isDown || cursors.up.isDown || wKey.isDown) && players[sessionID].body.onFloor() && game.time.now > jumpTimer) {
+            players[sessionID].body.velocity.y = -300;
+            jumpTimer = game.time.now + 750;
+        }
+        if (game.input.activePointer.isDown) {
+            fire();
+        }
+        var impulse = players[sessionID].body.velocity;
+        var vector = {
+            sessionID: sessionID,
+            impulse: players[sessionID].body.velocity
+        };
+        socket.emit('playerImpulse', vector);
     }
-    if ((spacebar.isDown || cursors.up.isDown || wKey.isDown) && players[userPlayer].body.onFloor() && game.time.now > jumpTimer) {
-        players[userPlayer].body.velocity.y = -300;
-        jumpTimer = game.time.now + 750;
-    }
-    if (game.input.activePointer.isDown) {
-        fire();
-    }
-    var impulse = players[userPlayer].body.velocity;
-    var vector = {
-        sessionID: sessionID,
-        impulse: players[userPlayer].body.velocity
-    };
-    socket.emit('playerImpulse', vector);
+    socket.on('updatedImpulse', function (data) {
+        var i = data.sessionID;
+    });
 }
 function fire() {
     if (game.time.now > nextFire && bullets.countDead() > 0) {
         nextFire = game.time.now + fireRate;
         var bullet = bullets.getFirstDead();
-        bullet.reset(players[userPlayer].x + 10, players[userPlayer].y + 20);
+        bullet.reset(players[sessionID].x + 10, players[sessionID].y + 20);
         game.physics.arcade.moveToPointer(bullet, 700);
     }
 }
 function render() {
-    if (game.input.x < players[userPlayer].x - game.camera.x) {
-        if (facing != 'left') {
-            players[userPlayer].animations.play('left');
-            facing = 'left';
-        }
+    if (players[sessionID] === undefined) {
     }
     else {
-        if (facing != 'right') {
-            players[userPlayer].animations.play('right');
-            facing = 'right';
+        if (game.input.x < players[sessionID].x - game.camera.x) {
+            if (facing != 'left') {
+                players[sessionID].animations.play('left');
+                facing = 'left';
+            }
+        }
+        else {
+            if (facing != 'right') {
+                players[sessionID].animations.play('right');
+                facing = 'right';
+            }
         }
     }
 }
