@@ -96,7 +96,7 @@ function create() {
     wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
-    gun = game.add.sprite(10, 40, 'gun');
+    gun = game.add.sprite(15, 35, 'gun');
     player.addChild(gun);
 }
 
@@ -148,7 +148,7 @@ function update() {
     if (game.input.activePointer.isDown) {
         fire();
     }
-    gun.rotation = game.physics.arcade.angleToPointer(gun);
+    gun.rotation = game.physics.arcade.angleToPointer(player);
 }
 
 function fire() {
