@@ -20,22 +20,81 @@
  "renderorder":"right-down",
  "tileheight":16,
  "tilesets":[
-        {
-         "firstgid":1,
-         "image":"tiles-default.png",
-         "imageheight":64,
-         "imagewidth":272,
-         "margin":0,
-         "name":"tiles-default",
-         "properties":
-            {
+         {
+          "firstgid":1,
+          "image":"tiles-default.png",
+          "imageheight":64,
+          "imagewidth":272,
+          "margin":0,
+          "name":"tiles-default",
+          "properties":
+             {
 
-            },
-         "spacing":0,
-         "tilecount":68,
-         "tileheight":16,
-         "tilewidth":16
-        }],
+             },
+          "spacing":0,
+          "tileheight":16,
+          "tilewidth":16
+         },
+         {
+          "firstgid":101,
+          "image":"tiles-dark-blue.png",
+          "imageheight":64,
+          "imagewidth":272,
+          "margin":0,
+          "name":"tiles-dark-blue",
+          "properties":
+             {
+
+             },
+          "spacing":0,
+          "tileheight":16,
+          "tilewidth":16
+         },
+         {
+          "firstgid":201,
+          "image":"tiles-green.png",
+          "imageheight":64,
+          "imagewidth":272,
+          "margin":0,
+          "name":"tiles-green",
+          "properties":
+             {
+
+             },
+          "spacing":0,
+          "tileheight":16,
+          "tilewidth":16
+         },
+         {
+          "firstgid":301,
+          "image":"tiles-light-blue.png",
+          "imageheight":64,
+          "imagewidth":272,
+          "margin":0,
+          "name":"tiles-light-blue",
+          "properties":
+             {
+
+             },
+          "spacing":0,
+          "tileheight":16,
+          "tilewidth":16
+         },
+         {
+          "firstgid":401,
+          "image":"tiles-purple.png",
+          "imageheight":64,
+          "imagewidth":272,
+          "margin":0,
+          "name":"tiles-purple",
+          "properties":
+             {
+
+             },
+          "spacing":0,
+          "tileheight":16,
+          "tilewidth":16
+         }],
  "tilewidth":16,
  "version":1,
  "width":120
