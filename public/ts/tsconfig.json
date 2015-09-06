@@ -26,6 +26,8 @@
         "./definitions/phaser.d.ts",
         "./definitions/pixi.comments.d.ts",
         "./definitions/pixi.d.ts",
+        "./definitions/socket.io-client.d.ts",
+        "./definitions/socket.io.d.ts",
         "./main.ts"
     ]
 }

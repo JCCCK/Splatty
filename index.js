@@ -3,7 +3,7 @@ var express = require('express'),
     app = express(),
     http = require('http'),
     path = require('path'),
-    Game = require('./game.js')
+    Game = require('./game.js'),
     server = require('http').Server(app),
     io = require('socket.io')(server);
 

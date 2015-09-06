@@ -200,7 +200,6 @@ function update(){
              impulse: players[sessionID].body.velocity
         }
         socket.emit('playerImpulse', vector);
-
     }
 
     //grab new players
@@ -212,7 +211,6 @@ function update(){
     socket.on('updatedImpulse', function(data){
         var i = data.sessionID;
     });
-
 
 }
 
