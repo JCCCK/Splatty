@@ -1,5 +1,5 @@
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update, render: render });
-var socket = io.connect('localhost:5000');
+var socket = io.connect('https://splatty.co');
 var sessionID = 0;
 socket.on('connect', function (data) {
     console.log(data);
