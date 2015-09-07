@@ -59,7 +59,7 @@ function create(){
     pad4 = game.input.gamepad.pad4;
 
     //sounds
-    jump_up = game.add.audio('jump_up');
+    jump_up = game.add.audio('jump_up', 0.2);
     jump_land = game.add.audio('jump_land');
     splash = game.add.audio('splash');
 
