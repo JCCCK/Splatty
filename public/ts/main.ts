@@ -55,5 +55,6 @@ function preload() {
     game.load.audio('jump_up', '/resources/sounds/jump_up.wav');
     game.load.audio('jump_land', '/resources/sounds/jump_land.wav');
     game.load.audio('splash', '/resources/sounds/splash.wav');
+    game.load.audio('shoot', '/resources/sounds/shoot.wav');
 
 }

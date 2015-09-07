@@ -26,6 +26,7 @@ var controllerconnected;
 var jump_up;
 var jump_land;
 var splash;
+var shoot;
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.physics.arcade.gravity.y = 500;
@@ -40,6 +41,7 @@ function create() {
     jump_up = game.add.audio('jump_up', 0.2);
     jump_land = game.add.audio('jump_land');
     splash = game.add.audio('splash');
+    shoot = game.add.audio('shoot', 0.5);
     cursors = game.input.keyboard.createCursorKeys();
     spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);

@@ -1,5 +1,5 @@
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'gameDiv', { preload: preload, create: create, update: update, render: render });
-var socket = io.connect('https://secret-temple-3770.herokuapp.com/');
+var socket = io.connect('localhost:5000');
 var sessionID = 0;
 socket.on('connect', function (data) {
     console.log(data);
@@ -31,4 +31,5 @@ function preload() {
     game.load.audio('jump_up', '/resources/sounds/jump_up.wav');
     game.load.audio('jump_land', '/resources/sounds/jump_land.wav');
     game.load.audio('splash', '/resources/sounds/splash.wav');
+    game.load.audio('shoot', '/resources/sounds/shoot.wav');
 }
