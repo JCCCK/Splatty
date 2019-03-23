@@ -1,28 +1,22 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <% include ../partials/header.ejs %>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <% include ../partials/nav.ejs %>
 
-        <div class="container">
-            <h2>Database Results</h2>
+    <div class="container">
+      <h2>Database Results</h2>
 
-            <ul>
-                <% results.forEach(function(r) { %>
-                    <li>
-                        <%= r.id %> -
-                            <%= r.name %>
-                    </li>
-                    <% }); %>
-            </ul>
-
-        </div>
-
-</body>
-
+      <ul>
+        <% results.forEach(function(r) { %>
+        <li>
+          <%= r.id %> - <%= r.name %>
+        </li>
+        <% }); %>
+      </ul>
+    </div>
+  </body>
 </html>
