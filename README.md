@@ -1,24 +1,25 @@
-Splatty
-====
+# Splatty
 
-Splatty is a simple HTML5 bulletin board made at PenappsXII Fall 2015. 
+Splatty is a real-time multiplayer 2D game built at PennApps XII (Fall 2015).
 
-Inspired by the Wii game Splatoon, join in a 2D multiplayer battle of up to 16 player on 4 teams with the goal to cover the map in your team color.
+![Splatty](https://i.imgur.com/y2oYiPW.png)
 
-Splatty was built with Node.js, Phaser.js, and Socket.io.
+Inspired by the Wii game Splatoon, join in a 2D multiplayer battle of up to 16 player on 4 teams with the goal to cover the map in your teams color.
 
-##To use
+Splatty was built with [Node.js](https://nodejs.org/), [Phaser](https://phaser.io/), and [Socket.IO](https://socket.io/).
 
-Visit http://splatty.co/ .
+## How to Play
 
-##Status
+Visit [splatty.co](http://splatty.co/).
+
+## Development Status
 
 Development is currently halted. We'd love to improve the game, especially the very buggy net code, and may in the future.
 
 Feel free to make feature and bug requests, but don't expect them to get done. Feel free to make pull requests.
 
-##To install on your own server
+## Running Locally
 
-Prerequisits: Node.JS, NPM
+**Requires**: [Node.js](https://nodejs.org/)
 
-Just clone the repository, navigate to it in a terminal, then run "npm install" to install the dependencies, then "npm start" to start the server. Access the server at localhost:5000 in your favorite web browser. 
+Clone the repository and run `npm install` to install the dependencies, then `npm start` to start the server. Access the server at `localhost:5000` in a web browser.
